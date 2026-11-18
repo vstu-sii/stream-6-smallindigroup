@@ -16,17 +16,19 @@ Render выбран благодаря поддержке Docker, интегра
 2. Выбрать **New → Web Service** → **Git Provider** и подключить репозиторий `vstu-sii/stream-6-smallindigroup`. Ветка должна быть опубликована на GitHub, а интеграции Render нужен доступ к репозиторию.
 3. Указать ветку `lab1-delivery-initiation` и следующие параметры:
    - **Language:** Docker
-   - **Root Directory:** оставить пустым
-   - **Dockerfile Path:** `backend/Dockerfile`
-   - **Docker Build Context Directory:** `backend`
+   - **Root Directory:** `backend`
+   - **Dockerfile Path:** `./Dockerfile`
+   - **Docker Build Context Directory:** `.`
    - **Health Check Path:** `/health`
    - **Auto-Deploy:** On Commit
+
+   Render подставляет `backend/` к путям Dockerfile и контекста сборки. В этих двух полях указывайте путь относительно `backend`.
 4. Выбрать доступный тариф и нажать **Deploy Web Service**.
 5. Дождаться успешной сборки и запуска контейнера.
 6. Открыть выданный Render HTTPS-адрес и проверить `/`, `/health` и `/docs`. Все три маршрута должны вернуть HTTP 200, а `/health` — `{"status":"ok"}`.
 7. Записать проверенный HTTPS-адрес в этот документ и раздел Production в README.
 
-**Прод-URL:** будет добавлен после первого успешного деплоя.
+**Прод-URL:** [Reviews Analyzer API](https://stream-6-smallindigroup.onrender.com/).
 
 После слияния Pull Request выбрать `main` в **Settings → Build & Deploy → Branch**. После развёртывания `main` повторить проверки по тому же HTTPS-адресу.
 

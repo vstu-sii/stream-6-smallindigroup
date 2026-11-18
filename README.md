@@ -326,7 +326,7 @@ Workflow настроен на запуск при создании или об�
 
 На первом этапе в production размещается минимальная заглушка FastAPI.
 
-**Production URL:** будет добавлен после развёртывания.
+**Production URL:** [Reviews Analyzer API](https://stream-6-smallindigroup.onrender.com/).
 
 Инструкция по развёртыванию и проверке приложения находится в [docs/deploy.md](docs/deploy.md).
 
