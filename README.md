@@ -88,7 +88,7 @@ stream-6-smallindigroup/
 │
 ├── .env.example                   # Шаблон переменных окружения
 ├── .gitignore
-├── compose.dev.yml                # Локальная среда
+├── compose.yaml                   # Сервисы локальной среды
 └── README.md
 
 ```
@@ -116,39 +116,23 @@ git clone https://github.com/vstu-sii/stream-6-smallindigroup.git
 cd stream-6-smallindigroup
 ```
 
-**2. Создать файл переменных окружения:**
-
-Windows PowerShell:
-
-```powershell
-Copy-Item .env.example .env
-```
-
-Linux/macOS:
+**2. Запустить контейнеры из корня репозитория:**
 
 ```bash
-cp .env.example .env
+docker compose up -d
 ```
 
-При изменении параметров PostgreSQL в `.env` обновите и `DATABASE_URL`. Внутри сети Compose база доступна по адресу `db:5432`.
+При первом запуске Compose собирает образ FastAPI и запускает PostgreSQL с настройками по умолчанию. После обновления кода пересоберите образ командой `docker compose up --build -d`.
 
-**3. Собрать и запустить контейнеры:**
-
-```bash
-docker compose -f compose.dev.yml up --build -d
-```
-
-Команда собирает Docker-образ FastAPI, запускает PostgreSQL и создаёт необходимые Docker-ресурсы.
-
-**4. Проверить состояние сервисов:**
+**3. Проверить состояние сервисов:**
 
 ```bash
-docker compose -f compose.dev.yml ps
+docker compose ps
 ```
 
 Контейнер API должен быть в состоянии `Up`, а PostgreSQL — в состоянии `Up (healthy)`.
 
-**5. Проверить API:**
+**4. Проверить API:**
 
 - Главная страница: http://localhost:8000/
 - Health check: http://localhost:8000/health
@@ -159,25 +143,25 @@ docker compose -f compose.dev.yml ps
 Просмотр логов:
 
 ```bash
-docker compose -f compose.dev.yml logs -f
+docker compose logs -f
 ```
 
 Перезапуск:
 
 ```bash
-docker compose -f compose.dev.yml restart
+docker compose restart
 ```
 
 Остановка:
 
 ```bash
-docker compose -f compose.dev.yml down
+docker compose down
 ```
 
 Остановка с удалением томов:
 
 ```bash
-docker compose -f compose.dev.yml down -v
+docker compose down -v
 ```
 
 **Внимание:** последний вариант удаляет локальные данные PostgreSQL, хранящиеся в томе Compose.
@@ -307,7 +291,7 @@ Workflow настроен на запуск при создании или об�
 
 ## Переменные окружения
 
-Для локальной конфигурации используется `.env`, создаваемый на основе `.env.example`.
+Для переопределения локальных настроек скопируйте `.env.example` в `.env` (`Copy-Item .env.example .env` в PowerShell или `cp .env.example .env` в Linux/macOS). При изменении параметров PostgreSQL обновите и `DATABASE_URL`. В сети Compose адрес базы — `db:5432`.
 
 | Переменная | Назначение |
 |---|---|

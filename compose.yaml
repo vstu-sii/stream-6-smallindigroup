@@ -1,4 +1,3 @@
-
 services:
   api:
     build:
@@ -8,7 +7,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://reviews_user:change_me@db:5432/reviews_db}
     depends_on:
       db:
         condition: service_healthy
@@ -18,9 +17,9 @@ services:
     image: postgres:17-alpine
     container_name: reviews-postgres
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-reviews_db}
+      POSTGRES_USER: ${POSTGRES_USER:-reviews_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me}
     ports:
       - "5432:5432"
     volumes:
