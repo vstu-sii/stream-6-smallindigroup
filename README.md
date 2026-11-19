@@ -74,7 +74,8 @@ stream-6-smallindigroup/
 │   │   ├── __init__.py
 │   │   └── main.py                # FastAPI-приложение
 │   ├── tests/
-│   │   └── test_main.py           # Тесты API
+│   │   ├── test_main.py           # Тесты API
+│   │   └── test_golden_dataset.py # Проверка формата и покрытия golden dataset
 │   ├── .dockerignore
 │   ├── Dockerfile                 # Сборка Docker-образа
 │   ├── requirements.txt           # Основные зависимости
@@ -88,8 +89,11 @@ stream-6-smallindigroup/
 │   └── quality/                   # Quality & Safety
 │       ├── success-criteria.md    # Критерии успеха и метрики
 │       ├── golden-dataset-plan.md # План golden dataset
-│       ├── golden-dataset/        # Эталонные примеры (JSON Lines)
-│       └── dod-draft.md           # Заготовка DoD к лабе 2
+│       ├── golden-dataset/        # Эталонные примеры (JSON Lines) и их описание
+│       ├── dod.md                 # Definition of Done артефактов команды
+│       ├── dod-draft.md           # Заготовка DoD (лаба 1, история)
+│       ├── test-plan.md           # Тест-план: уровни и что идёт в CI
+│       └── threat-model.md        # Модель угроз
 │
 ├── .env.example                   # Шаблон переменных окружения
 ├── .gitignore
