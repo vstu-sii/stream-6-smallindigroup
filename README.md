@@ -84,7 +84,12 @@ stream-6-smallindigroup/
 │   └── .gitkeep                   # Сохранение пустой папки в Git
 │
 ├── docs/
-│   └── deploy.md                  # Инструкция по деплою
+│   ├── deploy.md                  # Инструкция по деплою
+│   └── quality/                   # Quality & Safety
+│       ├── success-criteria.md    # Критерии успеха и метрики
+│       ├── golden-dataset-plan.md # План golden dataset
+│       ├── golden-dataset/        # Эталонные примеры (JSON Lines)
+│       └── dod-draft.md           # Заготовка DoD к лабе 2
 │
 ├── .env.example                   # Шаблон переменных окружения
 ├── .gitignore
