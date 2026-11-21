@@ -1,0 +1,298 @@
+{
+  "protocol": {
+    "started_at_utc": "2026-11-21T00:26:20.891776+00:00",
+    "model": "mlx-community/Qwen3-4B-4bit",
+    "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+    "weights_sha256": "e240c0bdc0ebb0681bf0da0f98d9719fd6ebe269a3633f81542c13e81345651d",
+    "runner_sha256": "60e603a8b51fecebcf30f7068afcfb9109e754f79adb6a0e1f8dfb8f9df761ef",
+    "evaluator_sha256": "f111ad748c74f833d69309e1c85dfce7a94fad915a2ea6ce8f5dc3c8e25e3289",
+    "environment": {
+      "python": "3.12.16",
+      "machine": "arm64",
+      "mlx": "0.32.4",
+      "mlx-lm": "0.32.2",
+      "transformers": "5.23.0"
+    },
+    "hardware": {
+      "chip_type": "Apple M1 Pro",
+      "physical_memory": "16 GB",
+      "number_processors": "proc 8:0:6:2"
+    },
+    "load_seconds": 1.9362012080382556,
+    "temperature": 0,
+    "seed": 0,
+    "enable_thinking": false,
+    "max_output_tokens": 800,
+    "network_during_inference": false,
+    "cloud_api_cost_rub": 0,
+    "parse_policy": "strict json.loads, no extraction or repair",
+    "prompts": [
+      "p2"
+    ],
+    "scope": "synthetic development/diagnostic pilot, not independent validation"
+  },
+  "groups": [
+    {
+      "dataset": "challenge",
+      "prompt": "p2",
+      "repeats": 3,
+      "unique_records": 8,
+      "calls": 24,
+      "predictions_identical_across_repeats": true,
+      "metrics_range": {
+        "problem_precision": {
+          "min": 0.6666666666666666,
+          "max": 0.6666666666666666
+        },
+        "problem_recall": {
+          "min": 0.8,
+          "max": 0.8
+        },
+        "schema_valid": {
+          "min": 1.0,
+          "max": 1.0
+        },
+        "owner_accuracy_including_null": {
+          "min": 0.875,
+          "max": 0.875
+        },
+        "severity_exact_accuracy": {
+          "min": 0.625,
+          "max": 0.625
+        },
+        "sentiment_accuracy": {
+          "min": 1.0,
+          "max": 1.0
+        },
+        "p95_seconds": {
+          "min": 4.7559083751402795,
+          "max": 5.222503792028874
+        }
+      },
+      "first_run_metrics": {
+        "n": 8,
+        "tp": 4,
+        "fp": 2,
+        "fn": 1,
+        "problem_precision": 0.6666666666666666,
+        "problem_recall": 0.8,
+        "literal_evidence": {
+          "valid": 6,
+          "total": 6,
+          "ratio": 1.0
+        },
+        "schema_valid": 1.0,
+        "owner_accuracy_including_null": 0.875,
+        "severity_exact_accuracy": 0.625,
+        "sentiment_accuracy": 1.0,
+        "critical_recall": {
+          "found": 0,
+          "total": 1,
+          "ratio": 0.0
+        },
+        "p95_seconds": 4.7559083751402795,
+        "grouping": null,
+        "north_star": null,
+        "errors": [
+          {
+            "id": "ch-01",
+            "differences": {
+              "problems": {
+                "missing": [],
+                "extra": [
+                  "material_quality"
+                ]
+              },
+              "severity": {
+                "expected": "none",
+                "actual": "low"
+              },
+              "owner": {
+                "expected": null,
+                "actual": "seller"
+              }
+            }
+          },
+          {
+            "id": "ch-02",
+            "differences": {
+              "problems": {
+                "missing": [
+                  "material_quality"
+                ],
+                "extra": [
+                  "defect_after_use"
+                ]
+              },
+              "severity": {
+                "expected": "high",
+                "actual": "medium"
+              }
+            }
+          },
+          {
+            "id": "ch-04",
+            "differences": {
+              "severity": {
+                "expected": "critical",
+                "actual": "high"
+              }
+            }
+          }
+        ]
+      },
+      "mean_latency_seconds": 4.717179524421226,
+      "max_mlx_memory_gb": 3.241709668,
+      "total_prompt_tokens": 26550,
+      "total_generation_tokens": 1176,
+      "length_stops": 0
+    },
+    {
+      "dataset": "golden",
+      "prompt": "p2",
+      "repeats": 3,
+      "unique_records": 12,
+      "calls": 36,
+      "predictions_identical_across_repeats": true,
+      "metrics_range": {
+        "problem_precision": {
+          "min": 0.8333333333333334,
+          "max": 0.8333333333333334
+        },
+        "problem_recall": {
+          "min": 0.8333333333333334,
+          "max": 0.8333333333333334
+        },
+        "schema_valid": {
+          "min": 1.0,
+          "max": 1.0
+        },
+        "owner_accuracy_including_null": {
+          "min": 0.8333333333333334,
+          "max": 0.8333333333333334
+        },
+        "severity_exact_accuracy": {
+          "min": 0.8333333333333334,
+          "max": 0.8333333333333334
+        },
+        "sentiment_accuracy": {
+          "min": 0.9166666666666666,
+          "max": 0.9166666666666666
+        },
+        "p95_seconds": {
+          "min": 5.697957874974236,
+          "max": 5.875467957928777
+        }
+      },
+      "first_run_metrics": {
+        "n": 12,
+        "tp": 10,
+        "fp": 2,
+        "fn": 2,
+        "problem_precision": 0.8333333333333334,
+        "problem_recall": 0.8333333333333334,
+        "literal_evidence": {
+          "valid": 8,
+          "total": 12,
+          "ratio": 0.6666666666666666
+        },
+        "schema_valid": 1.0,
+        "owner_accuracy_including_null": 0.8333333333333334,
+        "severity_exact_accuracy": 0.8333333333333334,
+        "sentiment_accuracy": 0.9166666666666666,
+        "critical_recall": {
+          "found": 0,
+          "total": 1,
+          "ratio": 0.0
+        },
+        "p95_seconds": 5.875467957928777,
+        "grouping": null,
+        "north_star": null,
+        "errors": [
+          {
+            "id": "gd-0001",
+            "differences": {
+              "sentiment": {
+                "expected": "negative",
+                "actual": "mixed"
+              }
+            }
+          },
+          {
+            "id": "gd-0007",
+            "differences": {
+              "severity": {
+                "expected": "medium",
+                "actual": "low"
+              },
+              "owner": {
+                "expected": "seller",
+                "actual": "marketplace"
+              }
+            }
+          },
+          {
+            "id": "gd-0009",
+            "differences": {
+              "problems": {
+                "missing": [
+                  "not_delivered"
+                ],
+                "extra": [
+                  "delivery_delay"
+                ]
+              },
+              "suspicious": {
+                "expected": false,
+                "actual": true
+              }
+            }
+          },
+          {
+            "id": "gd-0010",
+            "differences": {
+              "suspicious": {
+                "expected": true,
+                "actual": false
+              }
+            }
+          },
+          {
+            "id": "gd-0011",
+            "differences": {
+              "problems": {
+                "missing": [
+                  "safety_hazard"
+                ],
+                "extra": [
+                  "defect_on_arrival"
+                ]
+              },
+              "severity": {
+                "expected": "critical",
+                "actual": "high"
+              }
+            }
+          },
+          {
+            "id": "gd-0012",
+            "differences": {
+              "owner": {
+                "expected": "seller",
+                "actual": "marketplace"
+              }
+            }
+          }
+        ]
+      },
+      "mean_latency_seconds": 4.956635097196947,
+      "max_mlx_memory_gb": 3.241709668,
+      "total_prompt_tokens": 40632,
+      "total_generation_tokens": 1986,
+      "length_stops": 0
+    }
+  ],
+  "total_calls": 60,
+  "cloud_api_cost_rub": 0,
+  "independent_evaluation": false
+}

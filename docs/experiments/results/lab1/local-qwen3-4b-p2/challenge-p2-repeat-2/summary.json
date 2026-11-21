@@ -1,0 +1,85 @@
+{
+  "metadata": {
+    "model": "mlx-community/Qwen3-4B-4bit",
+    "repeat": 2,
+    "dataset_sha256": "291fd657858333459cdac70126442d97f12c6ffc2ffbeca011e9b0001627bc04",
+    "prompt_sha256": "633a83c7d8303b7f3fd69c8b08a160592eee0cf9831ce9cda739a313a4d920d2",
+    "elapsed_seconds": 37.98505895794369,
+    "prompt_tokens": 8850,
+    "generation_tokens": 392,
+    "cloud_api_cost_rub": 0,
+    "local_electricity_cost": "not measured"
+  },
+  "metrics": {
+    "n": 8,
+    "tp": 4,
+    "fp": 2,
+    "fn": 1,
+    "problem_precision": 0.6666666666666666,
+    "problem_recall": 0.8,
+    "literal_evidence": {
+      "valid": 6,
+      "total": 6,
+      "ratio": 1.0
+    },
+    "schema_valid": 1.0,
+    "owner_accuracy_including_null": 0.875,
+    "severity_exact_accuracy": 0.625,
+    "sentiment_accuracy": 1.0,
+    "critical_recall": {
+      "found": 0,
+      "total": 1,
+      "ratio": 0.0
+    },
+    "p95_seconds": 5.125244833063334,
+    "grouping": null,
+    "north_star": null,
+    "errors": [
+      {
+        "id": "ch-01",
+        "differences": {
+          "problems": {
+            "missing": [],
+            "extra": [
+              "material_quality"
+            ]
+          },
+          "severity": {
+            "expected": "none",
+            "actual": "low"
+          },
+          "owner": {
+            "expected": null,
+            "actual": "seller"
+          }
+        }
+      },
+      {
+        "id": "ch-02",
+        "differences": {
+          "problems": {
+            "missing": [
+              "material_quality"
+            ],
+            "extra": [
+              "defect_after_use"
+            ]
+          },
+          "severity": {
+            "expected": "high",
+            "actual": "medium"
+          }
+        }
+      },
+      {
+        "id": "ch-04",
+        "differences": {
+          "severity": {
+            "expected": "critical",
+            "actual": "high"
+          }
+        }
+      }
+    ]
+  }
+}

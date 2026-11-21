@@ -1,0 +1,182 @@
+{
+  "metadata": {
+    "started_at_utc": "2026-11-20T21:05:32.122825+00:00",
+    "provider": "rules",
+    "model": "rules-v1",
+    "dataset": "experiments/lab1/challenge-v0.1.jsonl",
+    "dataset_sha256": "291fd657858333459cdac70126442d97f12c6ffc2ffbeca011e9b0001627bc04",
+    "runner_sha256": "f111ad748c74f833d69309e1c85dfce7a94fad915a2ea6ce8f5dc3c8e25e3289",
+    "prompt_sha256": null,
+    "python": "3.9.6",
+    "platform": "macOS-27.0.1-arm64-arm-64bit",
+    "elapsed_seconds": 0.013944917000000001,
+    "tokens": null,
+    "inference_api_cost_rub": 0,
+    "scope": "development pilot; NOT product acceptance or independent validation"
+  },
+  "metrics": {
+    "n": 8,
+    "tp": 0,
+    "fp": 1,
+    "fn": 5,
+    "problem_precision": 0.0,
+    "problem_recall": 0.0,
+    "literal_evidence": {
+      "valid": 1,
+      "total": 1,
+      "ratio": 1.0
+    },
+    "schema_valid": 1.0,
+    "owner_accuracy_including_null": 0.25,
+    "severity_exact_accuracy": 0.25,
+    "sentiment_accuracy": 0.25,
+    "critical_recall": {
+      "found": 0,
+      "total": 1,
+      "ratio": 0.0
+    },
+    "p95_seconds": 0.0008342500000000017,
+    "grouping": null,
+    "north_star": null,
+    "errors": [
+      {
+        "id": "ch-01",
+        "differences": {
+          "problems": {
+            "missing": [],
+            "extra": [
+              "smell"
+            ]
+          },
+          "severity": {
+            "expected": "none",
+            "actual": "medium"
+          },
+          "owner": {
+            "expected": null,
+            "actual": "seller"
+          },
+          "sentiment": {
+            "expected": "positive",
+            "actual": "negative"
+          }
+        }
+      },
+      {
+        "id": "ch-02",
+        "differences": {
+          "problems": {
+            "missing": [
+              "material_quality"
+            ],
+            "extra": []
+          },
+          "severity": {
+            "expected": "high",
+            "actual": "none"
+          },
+          "owner": {
+            "expected": "seller",
+            "actual": null
+          },
+          "sentiment": {
+            "expected": "negative",
+            "actual": "neutral"
+          }
+        }
+      },
+      {
+        "id": "ch-03",
+        "differences": {
+          "problems": {
+            "missing": [
+              "delivery_delay"
+            ],
+            "extra": []
+          },
+          "severity": {
+            "expected": "medium",
+            "actual": "none"
+          },
+          "owner": {
+            "expected": "marketplace",
+            "actual": null
+          },
+          "sentiment": {
+            "expected": "negative",
+            "actual": "neutral"
+          }
+        }
+      },
+      {
+        "id": "ch-04",
+        "differences": {
+          "problems": {
+            "missing": [
+              "safety_hazard"
+            ],
+            "extra": []
+          },
+          "severity": {
+            "expected": "critical",
+            "actual": "none"
+          },
+          "owner": {
+            "expected": "seller",
+            "actual": null
+          },
+          "sentiment": {
+            "expected": "negative",
+            "actual": "neutral"
+          }
+        }
+      },
+      {
+        "id": "ch-05",
+        "differences": {
+          "problems": {
+            "missing": [
+              "defect_after_use"
+            ],
+            "extra": []
+          },
+          "severity": {
+            "expected": "medium",
+            "actual": "none"
+          },
+          "owner": {
+            "expected": "seller",
+            "actual": null
+          },
+          "sentiment": {
+            "expected": "mixed",
+            "actual": "neutral"
+          }
+        }
+      },
+      {
+        "id": "ch-06",
+        "differences": {
+          "problems": {
+            "missing": [
+              "size_mismatch"
+            ],
+            "extra": []
+          },
+          "severity": {
+            "expected": "medium",
+            "actual": "none"
+          },
+          "owner": {
+            "expected": "seller",
+            "actual": null
+          },
+          "sentiment": {
+            "expected": "negative",
+            "actual": "neutral"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,772 @@
+{
+  "protocol": {
+    "started_at_utc": "2026-11-21T00:20:22.113103+00:00",
+    "model": "mlx-community/Qwen3-4B-4bit",
+    "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+    "weights_sha256": "e240c0bdc0ebb0681bf0da0f98d9719fd6ebe269a3633f81542c13e81345651d",
+    "runner_sha256": "23349f9374fa82379770986c08ece9bdc7351bf354abce2fa6b7a579758e1022",
+    "evaluator_sha256": "f111ad748c74f833d69309e1c85dfce7a94fad915a2ea6ce8f5dc3c8e25e3289",
+    "environment": {
+      "python": "3.12.16",
+      "machine": "arm64",
+      "mlx": "0.32.4",
+      "mlx-lm": "0.32.2",
+      "transformers": "5.23.0"
+    },
+    "hardware": "Apple M1 Pro, 16 GB unified memory, 8 CPU cores",
+    "load_seconds": 2.0926311248913407,
+    "temperature": 0,
+    "seed": 0,
+    "enable_thinking": false,
+    "max_output_tokens": 800,
+    "network_during_inference": false,
+    "cloud_api_cost_rub": 0,
+    "parse_policy": "strict json.loads, no extraction or repair",
+    "scope": "synthetic development/diagnostic pilot, not independent validation"
+  },
+  "groups": [
+    {
+      "dataset": "challenge",
+      "prompt": "p0",
+      "repeats": 3,
+      "unique_records": 8,
+      "calls": 24,
+      "predictions_identical_across_repeats": true,
+      "metrics_range": {
+        "problem_precision": {
+          "min": 0.42857142857142855,
+          "max": 0.42857142857142855
+        },
+        "problem_recall": {
+          "min": 0.6,
+          "max": 0.6
+        },
+        "schema_valid": {
+          "min": 1.0,
+          "max": 1.0
+        },
+        "owner_accuracy_including_null": {
+          "min": 0.5,
+          "max": 0.5
+        },
+        "severity_exact_accuracy": {
+          "min": 0.625,
+          "max": 0.625
+        },
+        "sentiment_accuracy": {
+          "min": 0.625,
+          "max": 0.625
+        },
+        "p95_seconds": {
+          "min": 2.492245415924117,
+          "max": 2.7092163329944015
+        }
+      },
+      "first_run_metrics": {
+        "n": 8,
+        "tp": 3,
+        "fp": 4,
+        "fn": 2,
+        "problem_precision": 0.42857142857142855,
+        "problem_recall": 0.6,
+        "literal_evidence": {
+          "valid": 7,
+          "total": 7,
+          "ratio": 1.0
+        },
+        "schema_valid": 1.0,
+        "owner_accuracy_including_null": 0.5,
+        "severity_exact_accuracy": 0.625,
+        "sentiment_accuracy": 0.625,
+        "critical_recall": {
+          "found": 0,
+          "total": 1,
+          "ratio": 0.0
+        },
+        "p95_seconds": 2.583788957912475,
+        "grouping": null,
+        "north_star": null,
+        "errors": [
+          {
+            "id": "ch-01",
+            "differences": {
+              "problems": {
+                "missing": [],
+                "extra": [
+                  "description_mismatch",
+                  "smell"
+                ]
+              },
+              "severity": {
+                "expected": "none",
+                "actual": "low"
+              },
+              "owner": {
+                "expected": null,
+                "actual": "seller"
+              },
+              "sentiment": {
+                "expected": "positive",
+                "actual": "neutral"
+              }
+            }
+          },
+          {
+            "id": "ch-02",
+            "differences": {
+              "problems": {
+                "missing": [
+                  "material_quality"
+                ],
+                "extra": [
+                  "size_mismatch"
+                ]
+              },
+              "severity": {
+                "expected": "high",
+                "actual": "medium"
+              }
+            }
+          },
+          {
+            "id": "ch-03",
+            "differences": {
+              "owner": {
+                "expected": "marketplace",
+                "actual": "seller"
+              }
+            }
+          },
+          {
+            "id": "ch-04",
+            "differences": {
+              "problems": {
+                "missing": [
+                  "safety_hazard"
+                ],
+                "extra": [
+                  "defect_on_arrival"
+                ]
+              },
+              "severity": {
+                "expected": "critical",
+                "actual": "high"
+              }
+            }
+          },
+          {
+            "id": "ch-05",
+            "differences": {
+              "sentiment": {
+                "expected": "mixed",
+                "actual": "negative"
+              }
+            }
+          },
+          {
+            "id": "ch-07",
+            "differences": {
+              "owner": {
+                "expected": null,
+                "actual": "seller"
+              },
+              "sentiment": {
+                "expected": "positive",
+                "actual": "neutral"
+              }
+            }
+          },
+          {
+            "id": "ch-08",
+            "differences": {
+              "owner": {
+                "expected": null,
+                "actual": "seller"
+              }
+            }
+          }
+        ]
+      },
+      "mean_latency_seconds": 2.1844816648226697,
+      "max_mlx_memory_gb": 3.055653024,
+      "total_prompt_tokens": 5022,
+      "total_generation_tokens": 1854,
+      "length_stops": 0
+    },
+    {
+      "dataset": "challenge",
+      "prompt": "p1",
+      "repeats": 3,
+      "unique_records": 8,
+      "calls": 24,
+      "predictions_identical_across_repeats": true,
+      "metrics_range": {
+        "problem_precision": {
+          "min": 0.6666666666666666,
+          "max": 0.6666666666666666
+        },
+        "problem_recall": {
+          "min": 0.8,
+          "max": 0.8
+        },
+        "schema_valid": {
+          "min": 0.75,
+          "max": 0.75
+        },
+        "owner_accuracy_including_null": {
+          "min": 0.625,
+          "max": 0.625
+        },
+        "severity_exact_accuracy": {
+          "min": 0.625,
+          "max": 0.625
+        },
+        "sentiment_accuracy": {
+          "min": 0.625,
+          "max": 0.625
+        },
+        "p95_seconds": {
+          "min": 3.344848332926631,
+          "max": 3.61059912503697
+        }
+      },
+      "first_run_metrics": {
+        "n": 8,
+        "tp": 4,
+        "fp": 2,
+        "fn": 1,
+        "problem_precision": 0.6666666666666666,
+        "problem_recall": 0.8,
+        "literal_evidence": {
+          "valid": 5,
+          "total": 6,
+          "ratio": 0.8333333333333334
+        },
+        "schema_valid": 0.75,
+        "owner_accuracy_including_null": 0.625,
+        "severity_exact_accuracy": 0.625,
+        "sentiment_accuracy": 0.625,
+        "critical_recall": {
+          "found": 1,
+          "total": 1,
+          "ratio": 1.0
+        },
+        "p95_seconds": 3.344848332926631,
+        "grouping": null,
+        "north_star": null,
+        "errors": [
+          {
+            "id": "ch-01",
+            "differences": {
+              "problems": {
+                "missing": [],
+                "extra": [
+                  "smell"
+                ]
+              },
+              "owner": {
+                "expected": null,
+                "actual": "marketplace"
+              },
+              "sentiment": {
+                "expected": "positive",
+                "actual": "neutral"
+              }
+            }
+          },
+          {
+            "id": "ch-02",
+            "differences": {
+              "severity": {
+                "expected": "high",
+                "actual": "medium"
+              }
+            }
+          },
+          {
+            "id": "ch-04",
+            "differences": {
+              "problems": {
+                "missing": [
+                  "safety_hazard"
+                ],
+                "extra": [
+                  "defect_on_arrival"
+                ]
+              }
+            }
+          },
+          {
+            "id": "ch-07",
+            "differences": {
+              "severity": {
+                "expected": "none",
+                "actual": null
+              },
+              "owner": {
+                "expected": null,
+                "actual": "__invalid__"
+              },
+              "sentiment": {
+                "expected": "positive",
+                "actual": null
+              },
+              "suspicious": {
+                "expected": false,
+                "actual": null
+              },
+              "has_instruction": {
+                "expected": false,
+                "actual": null
+              }
+            }
+          },
+          {
+            "id": "ch-08",
+            "differences": {
+              "severity": {
+                "expected": "none",
+                "actual": null
+              },
+              "owner": {
+                "expected": null,
+                "actual": "__invalid__"
+              },
+              "sentiment": {
+                "expected": "neutral",
+                "actual": null
+              },
+              "suspicious": {
+                "expected": false,
+                "actual": null
+              },
+              "has_instruction": {
+                "expected": false,
+                "actual": null
+              }
+            }
+          }
+        ]
+      },
+      "mean_latency_seconds": 3.0615095312338476,
+      "max_mlx_memory_gb": 3.055653024,
+      "total_prompt_tokens": 15366,
+      "total_generation_tokens": 1242,
+      "length_stops": 0
+    },
+    {
+      "dataset": "golden",
+      "prompt": "p0",
+      "repeats": 3,
+      "unique_records": 12,
+      "calls": 36,
+      "predictions_identical_across_repeats": true,
+      "metrics_range": {
+        "problem_precision": {
+          "min": 0.7692307692307693,
+          "max": 0.7692307692307693
+        },
+        "problem_recall": {
+          "min": 0.8333333333333334,
+          "max": 0.8333333333333334
+        },
+        "schema_valid": {
+          "min": 1.0,
+          "max": 1.0
+        },
+        "owner_accuracy_including_null": {
+          "min": 0.5833333333333334,
+          "max": 0.5833333333333334
+        },
+        "severity_exact_accuracy": {
+          "min": 0.5,
+          "max": 0.5
+        },
+        "sentiment_accuracy": {
+          "min": 0.75,
+          "max": 0.75
+        },
+        "p95_seconds": {
+          "min": 3.705583792179823,
+          "max": 7.988225208129734
+        }
+      },
+      "first_run_metrics": {
+        "n": 12,
+        "tp": 10,
+        "fp": 3,
+        "fn": 2,
+        "problem_precision": 0.7692307692307693,
+        "problem_recall": 0.8333333333333334,
+        "literal_evidence": {
+          "valid": 12,
+          "total": 13,
+          "ratio": 0.9230769230769231
+        },
+        "schema_valid": 1.0,
+        "owner_accuracy_including_null": 0.5833333333333334,
+        "severity_exact_accuracy": 0.5,
+        "sentiment_accuracy": 0.75,
+        "critical_recall": {
+          "found": 0,
+          "total": 1,
+          "ratio": 0.0
+        },
+        "p95_seconds": 3.705583792179823,
+        "grouping": null,
+        "north_star": null,
+        "errors": [
+          {
+            "id": "gd-0002",
+            "differences": {
+              "problems": {
+                "missing": [],
+                "extra": [
+                  "defect_after_use"
+                ]
+              },
+              "severity": {
+                "expected": "high",
+                "actual": "medium"
+              },
+              "has_instruction": {
+                "expected": false,
+                "actual": true
+              }
+            }
+          },
+          {
+            "id": "gd-0003",
+            "differences": {
+              "problems": {
+                "missing": [],
+                "extra": [
+                  "defect_after_use"
+                ]
+              },
+              "severity": {
+                "expected": "high",
+                "actual": "medium"
+              },
+              "has_instruction": {
+                "expected": false,
+                "actual": true
+              }
+            }
+          },
+          {
+            "id": "gd-0004",
+            "differences": {
+              "has_instruction": {
+                "expected": false,
+                "actual": true
+              }
+            }
+          },
+          {
+            "id": "gd-0005",
+            "differences": {
+              "severity": {
+                "expected": "medium",
+                "actual": "low"
+              },
+              "owner": {
+                "expected": "seller",
+                "actual": "marketplace"
+              },
+              "sentiment": {
+                "expected": "mixed",
+                "actual": "negative"
+              },
+              "has_instruction": {
+                "expected": false,
+                "actual": true
+              }
+            }
+          },
+          {
+            "id": "gd-0006",
+            "differences": {
+              "owner": {
+                "expected": null,
+                "actual": "seller"
+              },
+              "sentiment": {
+                "expected": "positive",
+                "actual": "neutral"
+              },
+              "has_instruction": {
+                "expected": false,
+                "actual": true
+              }
+            }
+          },
+          {
+            "id": "gd-0008",
+            "differences": {
+              "problems": {
+                "missing": [
+                  "defect_on_arrival"
+                ],
+                "extra": []
+              },
+              "severity": {
+                "expected": "high",
+                "actual": "none"
+              },
+              "sentiment": {
+                "expected": "negative",
+                "actual": "neutral"
+              }
+            }
+          },
+          {
+            "id": "gd-0009",
+            "differences": {
+              "severity": {
+                "expected": "high",
+                "actual": "critical"
+              },
+              "owner": {
+                "expected": "marketplace",
+                "actual": "seller"
+              }
+            }
+          },
+          {
+            "id": "gd-0010",
+            "differences": {
+              "owner": {
+                "expected": null,
+                "actual": "seller"
+              },
+              "suspicious": {
+                "expected": true,
+                "actual": false
+              }
+            }
+          },
+          {
+            "id": "gd-0011",
+            "differences": {
+              "problems": {
+                "missing": [
+                  "safety_hazard"
+                ],
+                "extra": [
+                  "defect_after_use"
+                ]
+              },
+              "severity": {
+                "expected": "critical",
+                "actual": "high"
+              }
+            }
+          },
+          {
+            "id": "gd-0012",
+            "differences": {
+              "owner": {
+                "expected": "seller",
+                "actual": "marketplace"
+              }
+            }
+          }
+        ]
+      },
+      "mean_latency_seconds": 2.66824990504473,
+      "max_mlx_memory_gb": 3.055653024,
+      "total_prompt_tokens": 8340,
+      "total_generation_tokens": 3201,
+      "length_stops": 0
+    },
+    {
+      "dataset": "golden",
+      "prompt": "p1",
+      "repeats": 3,
+      "unique_records": 12,
+      "calls": 36,
+      "predictions_identical_across_repeats": true,
+      "metrics_range": {
+        "problem_precision": {
+          "min": 0.75,
+          "max": 0.75
+        },
+        "problem_recall": {
+          "min": 0.75,
+          "max": 0.75
+        },
+        "schema_valid": {
+          "min": 0.8333333333333334,
+          "max": 0.8333333333333334
+        },
+        "owner_accuracy_including_null": {
+          "min": 0.8333333333333334,
+          "max": 0.8333333333333334
+        },
+        "severity_exact_accuracy": {
+          "min": 0.5833333333333334,
+          "max": 0.5833333333333334
+        },
+        "sentiment_accuracy": {
+          "min": 0.75,
+          "max": 0.75
+        },
+        "p95_seconds": {
+          "min": 3.8988522498402745,
+          "max": 3.9129560419823974
+        }
+      },
+      "first_run_metrics": {
+        "n": 12,
+        "tp": 9,
+        "fp": 3,
+        "fn": 3,
+        "problem_precision": 0.75,
+        "problem_recall": 0.75,
+        "literal_evidence": {
+          "valid": 8,
+          "total": 12,
+          "ratio": 0.6666666666666666
+        },
+        "schema_valid": 0.8333333333333334,
+        "owner_accuracy_including_null": 0.8333333333333334,
+        "severity_exact_accuracy": 0.5833333333333334,
+        "sentiment_accuracy": 0.75,
+        "critical_recall": {
+          "found": 0,
+          "total": 1,
+          "ratio": 0.0
+        },
+        "p95_seconds": 3.8988522498402745,
+        "grouping": null,
+        "north_star": null,
+        "errors": [
+          {
+            "id": "gd-0001",
+            "differences": {
+              "sentiment": {
+                "expected": "negative",
+                "actual": "neutral"
+              }
+            }
+          },
+          {
+            "id": "gd-0003",
+            "differences": {
+              "problems": {
+                "missing": [
+                  "description_mismatch"
+                ],
+                "extra": [
+                  "defect_after_use"
+                ]
+              }
+            }
+          },
+          {
+            "id": "gd-0006",
+            "differences": {
+              "severity": {
+                "expected": "none",
+                "actual": null
+              },
+              "owner": {
+                "expected": null,
+                "actual": "__invalid__"
+              },
+              "sentiment": {
+                "expected": "positive",
+                "actual": null
+              },
+              "suspicious": {
+                "expected": false,
+                "actual": null
+              },
+              "has_instruction": {
+                "expected": false,
+                "actual": null
+              }
+            }
+          },
+          {
+            "id": "gd-0008",
+            "differences": {
+              "problems": {
+                "missing": [
+                  "defect_on_arrival"
+                ],
+                "extra": [
+                  "description_mismatch"
+                ]
+              },
+              "severity": {
+                "expected": "high",
+                "actual": "low"
+              }
+            }
+          },
+          {
+            "id": "gd-0009",
+            "differences": {
+              "severity": {
+                "expected": "high",
+                "actual": "critical"
+              }
+            }
+          },
+          {
+            "id": "gd-0010",
+            "differences": {
+              "severity": {
+                "expected": "none",
+                "actual": null
+              },
+              "owner": {
+                "expected": null,
+                "actual": "__invalid__"
+              },
+              "sentiment": {
+                "expected": "positive",
+                "actual": null
+              },
+              "suspicious": {
+                "expected": true,
+                "actual": null
+              },
+              "has_instruction": {
+                "expected": false,
+                "actual": null
+              }
+            }
+          },
+          {
+            "id": "gd-0011",
+            "differences": {
+              "problems": {
+                "missing": [
+                  "safety_hazard"
+                ],
+                "extra": [
+                  "defect_after_use"
+                ]
+              },
+              "severity": {
+                "expected": "critical",
+                "actual": "high"
+              }
+            }
+          }
+        ]
+      },
+      "mean_latency_seconds": 3.3291974490663656,
+      "max_mlx_memory_gb": 3.055653024,
+      "total_prompt_tokens": 23856,
+      "total_generation_tokens": 2151,
+      "length_stops": 0
+    }
+  ],
+  "total_calls": 120,
+  "cloud_api_cost_rub": 0,
+  "independent_evaluation": false
+}

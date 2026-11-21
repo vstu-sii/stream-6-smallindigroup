@@ -1,0 +1,25 @@
+{
+  "started_at_utc": "2026-11-21T00:19:55.103206+00:00",
+  "model": "mlx-community/Qwen3-4B-4bit",
+  "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+  "weights_sha256": "e240c0bdc0ebb0681bf0da0f98d9719fd6ebe269a3633f81542c13e81345651d",
+  "runner_sha256": "23349f9374fa82379770986c08ece9bdc7351bf354abce2fa6b7a579758e1022",
+  "evaluator_sha256": "f111ad748c74f833d69309e1c85dfce7a94fad915a2ea6ce8f5dc3c8e25e3289",
+  "environment": {
+    "python": "3.12.16",
+    "machine": "arm64",
+    "mlx": "0.32.4",
+    "mlx-lm": "0.32.2",
+    "transformers": "5.23.0"
+  },
+  "hardware": "Apple M1 Pro, 16 GB unified memory, 8 CPU cores",
+  "load_seconds": 2.140865582972765,
+  "temperature": 0,
+  "seed": 0,
+  "enable_thinking": false,
+  "max_output_tokens": 800,
+  "network_during_inference": false,
+  "cloud_api_cost_rub": 0,
+  "parse_policy": "strict json.loads, no extraction or repair",
+  "scope": "synthetic development/diagnostic pilot, not independent validation"
+}

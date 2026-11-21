@@ -1,0 +1,138 @@
+{
+  "metadata": {
+    "model": "mlx-community/Qwen3-4B-4bit",
+    "repeat": 3,
+    "dataset_sha256": "291fd657858333459cdac70126442d97f12c6ffc2ffbeca011e9b0001627bc04",
+    "prompt_sha256": "0f66e25221e802873b649770b521557ad16b66f12295d151bf895514907a051c",
+    "elapsed_seconds": 16.98807941703126,
+    "prompt_tokens": 1674,
+    "generation_tokens": 618,
+    "cloud_api_cost_rub": 0,
+    "local_electricity_cost": "not measured"
+  },
+  "metrics": {
+    "n": 8,
+    "tp": 3,
+    "fp": 4,
+    "fn": 2,
+    "problem_precision": 0.42857142857142855,
+    "problem_recall": 0.6,
+    "literal_evidence": {
+      "valid": 7,
+      "total": 7,
+      "ratio": 1.0
+    },
+    "schema_valid": 1.0,
+    "owner_accuracy_including_null": 0.5,
+    "severity_exact_accuracy": 0.625,
+    "sentiment_accuracy": 0.625,
+    "critical_recall": {
+      "found": 0,
+      "total": 1,
+      "ratio": 0.0
+    },
+    "p95_seconds": 2.492245415924117,
+    "grouping": null,
+    "north_star": null,
+    "errors": [
+      {
+        "id": "ch-01",
+        "differences": {
+          "problems": {
+            "missing": [],
+            "extra": [
+              "description_mismatch",
+              "smell"
+            ]
+          },
+          "severity": {
+            "expected": "none",
+            "actual": "low"
+          },
+          "owner": {
+            "expected": null,
+            "actual": "seller"
+          },
+          "sentiment": {
+            "expected": "positive",
+            "actual": "neutral"
+          }
+        }
+      },
+      {
+        "id": "ch-02",
+        "differences": {
+          "problems": {
+            "missing": [
+              "material_quality"
+            ],
+            "extra": [
+              "size_mismatch"
+            ]
+          },
+          "severity": {
+            "expected": "high",
+            "actual": "medium"
+          }
+        }
+      },
+      {
+        "id": "ch-03",
+        "differences": {
+          "owner": {
+            "expected": "marketplace",
+            "actual": "seller"
+          }
+        }
+      },
+      {
+        "id": "ch-04",
+        "differences": {
+          "problems": {
+            "missing": [
+              "safety_hazard"
+            ],
+            "extra": [
+              "defect_on_arrival"
+            ]
+          },
+          "severity": {
+            "expected": "critical",
+            "actual": "high"
+          }
+        }
+      },
+      {
+        "id": "ch-05",
+        "differences": {
+          "sentiment": {
+            "expected": "mixed",
+            "actual": "negative"
+          }
+        }
+      },
+      {
+        "id": "ch-07",
+        "differences": {
+          "owner": {
+            "expected": null,
+            "actual": "seller"
+          },
+          "sentiment": {
+            "expected": "positive",
+            "actual": "neutral"
+          }
+        }
+      },
+      {
+        "id": "ch-08",
+        "differences": {
+          "owner": {
+            "expected": null,
+            "actual": "seller"
+          }
+        }
+      }
+    ]
+  }
+}

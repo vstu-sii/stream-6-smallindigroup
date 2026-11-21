@@ -1,0 +1,76 @@
+{
+  "metadata": {
+    "started_at_utc": "2026-11-20T21:05:31.943319+00:00",
+    "provider": "rules",
+    "model": "rules-v0",
+    "dataset": "docs/quality/golden-dataset/golden-v0.1.jsonl",
+    "dataset_sha256": "8a3afe443d1dc14d555ef4c16b7836553a01cc9884d95e2e6dbbcf94edbc9ad6",
+    "runner_sha256": "f111ad748c74f833d69309e1c85dfce7a94fad915a2ea6ce8f5dc3c8e25e3289",
+    "prompt_sha256": null,
+    "python": "3.9.6",
+    "platform": "macOS-27.0.1-arm64-arm-64bit",
+    "elapsed_seconds": 0.016447417,
+    "tokens": null,
+    "inference_api_cost_rub": 0,
+    "scope": "development pilot; NOT product acceptance or independent validation"
+  },
+  "metrics": {
+    "n": 12,
+    "tp": 12,
+    "fp": 1,
+    "fn": 0,
+    "problem_precision": 0.9230769230769231,
+    "problem_recall": 1.0,
+    "literal_evidence": {
+      "valid": 13,
+      "total": 13,
+      "ratio": 1.0
+    },
+    "schema_valid": 1.0,
+    "owner_accuracy_including_null": 0.9166666666666666,
+    "severity_exact_accuracy": 0.9166666666666666,
+    "sentiment_accuracy": 0.8333333333333334,
+    "critical_recall": {
+      "found": 1,
+      "total": 1,
+      "ratio": 1.0
+    },
+    "p95_seconds": 0.0008220409999999956,
+    "grouping": null,
+    "north_star": null,
+    "errors": [
+      {
+        "id": "gd-0005",
+        "differences": {
+          "sentiment": {
+            "expected": "mixed",
+            "actual": "negative"
+          }
+        }
+      },
+      {
+        "id": "gd-0006",
+        "differences": {
+          "problems": {
+            "missing": [],
+            "extra": [
+              "material_quality"
+            ]
+          },
+          "severity": {
+            "expected": "none",
+            "actual": "high"
+          },
+          "owner": {
+            "expected": null,
+            "actual": "seller"
+          },
+          "sentiment": {
+            "expected": "positive",
+            "actual": "negative"
+          }
+        }
+      }
+    ]
+  }
+}

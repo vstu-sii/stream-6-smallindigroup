@@ -1,0 +1,131 @@
+{
+  "metadata": {
+    "model": "mlx-community/Qwen3-4B-4bit",
+    "repeat": 1,
+    "dataset_sha256": "291fd657858333459cdac70126442d97f12c6ffc2ffbeca011e9b0001627bc04",
+    "prompt_sha256": "ed4eff0376a87624c6244fa17d2e043867d370f2082458fd485424c8cdb483ab",
+    "elapsed_seconds": 24.627869499847293,
+    "prompt_tokens": 5122,
+    "generation_tokens": 414,
+    "cloud_api_cost_rub": 0,
+    "local_electricity_cost": "not measured"
+  },
+  "metrics": {
+    "n": 8,
+    "tp": 4,
+    "fp": 2,
+    "fn": 1,
+    "problem_precision": 0.6666666666666666,
+    "problem_recall": 0.8,
+    "literal_evidence": {
+      "valid": 5,
+      "total": 6,
+      "ratio": 0.8333333333333334
+    },
+    "schema_valid": 0.75,
+    "owner_accuracy_including_null": 0.625,
+    "severity_exact_accuracy": 0.625,
+    "sentiment_accuracy": 0.625,
+    "critical_recall": {
+      "found": 1,
+      "total": 1,
+      "ratio": 1.0
+    },
+    "p95_seconds": 3.344848332926631,
+    "grouping": null,
+    "north_star": null,
+    "errors": [
+      {
+        "id": "ch-01",
+        "differences": {
+          "problems": {
+            "missing": [],
+            "extra": [
+              "smell"
+            ]
+          },
+          "owner": {
+            "expected": null,
+            "actual": "marketplace"
+          },
+          "sentiment": {
+            "expected": "positive",
+            "actual": "neutral"
+          }
+        }
+      },
+      {
+        "id": "ch-02",
+        "differences": {
+          "severity": {
+            "expected": "high",
+            "actual": "medium"
+          }
+        }
+      },
+      {
+        "id": "ch-04",
+        "differences": {
+          "problems": {
+            "missing": [
+              "safety_hazard"
+            ],
+            "extra": [
+              "defect_on_arrival"
+            ]
+          }
+        }
+      },
+      {
+        "id": "ch-07",
+        "differences": {
+          "severity": {
+            "expected": "none",
+            "actual": null
+          },
+          "owner": {
+            "expected": null,
+            "actual": "__invalid__"
+          },
+          "sentiment": {
+            "expected": "positive",
+            "actual": null
+          },
+          "suspicious": {
+            "expected": false,
+            "actual": null
+          },
+          "has_instruction": {
+            "expected": false,
+            "actual": null
+          }
+        }
+      },
+      {
+        "id": "ch-08",
+        "differences": {
+          "severity": {
+            "expected": "none",
+            "actual": null
+          },
+          "owner": {
+            "expected": null,
+            "actual": "__invalid__"
+          },
+          "sentiment": {
+            "expected": "neutral",
+            "actual": null
+          },
+          "suspicious": {
+            "expected": false,
+            "actual": null
+          },
+          "has_instruction": {
+            "expected": false,
+            "actual": null
+          }
+        }
+      }
+    ]
+  }
+}

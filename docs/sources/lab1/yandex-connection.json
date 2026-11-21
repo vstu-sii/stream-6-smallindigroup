@@ -1,0 +1,14 @@
+{
+  "checked_on": "2026-11-21",
+  "provider": "Yandex AI Studio",
+  "endpoint": "https://ai.api.cloud.yandex.net/v1/models",
+  "method": "GET",
+  "http_status": 200,
+  "listed_models": 19,
+  "alice_flash_listed": true,
+  "inference_requests_sent": 0,
+  "grant_status": "none displayed in linked account overview",
+  "user_constraint": "free grant only; no paid inference authorized",
+  "note": "API metadata access verified. Does not prove generation quality, available credits, or billing status.",
+  "billing_consumption_type": "Paid version"
+}

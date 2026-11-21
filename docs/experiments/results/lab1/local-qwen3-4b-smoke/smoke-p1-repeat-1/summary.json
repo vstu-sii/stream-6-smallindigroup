@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "model": "mlx-community/Qwen3-4B-4bit",
+    "repeat": 1,
+    "dataset_sha256": "8a3afe443d1dc14d555ef4c16b7836553a01cc9884d95e2e6dbbcf94edbc9ad6",
+    "prompt_sha256": "ed4eff0376a87624c6244fa17d2e043867d370f2082458fd485424c8cdb483ab",
+    "elapsed_seconds": 6.258494999958202,
+    "prompt_tokens": 674,
+    "generation_tokens": 49,
+    "cloud_api_cost_rub": 0,
+    "local_electricity_cost": "not measured"
+  },
+  "metrics": {
+    "n": 1,
+    "tp": 1,
+    "fp": 0,
+    "fn": 0,
+    "problem_precision": 1.0,
+    "problem_recall": 1.0,
+    "literal_evidence": {
+      "valid": 1,
+      "total": 1,
+      "ratio": 1.0
+    },
+    "schema_valid": 1.0,
+    "owner_accuracy_including_null": 1.0,
+    "severity_exact_accuracy": 1.0,
+    "sentiment_accuracy": 0.0,
+    "critical_recall": {
+      "found": 0,
+      "total": 0,
+      "ratio": null
+    },
+    "p95_seconds": 6.225112958112732,
+    "grouping": null,
+    "north_star": null,
+    "errors": [
+      {
+        "id": "gd-0001",
+        "differences": {
+          "sentiment": {
+            "expected": "negative",
+            "actual": "neutral"
+          }
+        }
+      }
+    ]
+  }
+}
