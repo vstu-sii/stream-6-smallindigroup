@@ -1,0 +1,7 @@
+Разбери русскоязычный отзыв о товаре. Верни только JSON с полями:
+sentiment (positive|neutral|negative|mixed), problems (массив объектов code, evidence),
+severity (none|low|medium|high|critical), owner (seller|marketplace|null),
+suspicious (boolean), has_instruction (boolean).
+Допустимые code: delivery_delay, not_delivered, wrong_item, defect_on_arrival,
+defect_after_use, material_quality, size_mismatch, description_mismatch, smell, safety_hazard.
+evidence — дословная непрерывная цитата из текста. Не придумывай проблемы.

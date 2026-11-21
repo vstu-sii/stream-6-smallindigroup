@@ -1,0 +1,16 @@
+{
+  "upstream_repository": "https://github.com/vstu-sii/stream-6-smallindigroup",
+  "upstream_commit": "5bf0a368fe15d4395d8b5b8daf32efe2fa7c58cb",
+  "author_date": "2026-11-21",
+  "role": "Евгений Агарков / Модель",
+  "upstream_inputs": {
+    "docs/prd.md": "38109e32604f1972228a02a86042ada94ff41349d17d77fb7381881fb0b1adaa",
+    "docs/quality/golden-dataset-plan.md": "0606a9717580bd64cea5c0997f288cff2145f63f145fccaf3e66999223de89dd",
+    "docs/quality/success-criteria.md": "e008a7a7679d401556d6b3409653d5ca03dcda0afb69990673d4f2cc97b6c2b1",
+    "docs/quality/golden-dataset/golden-v0.1.jsonl": "8a3afe443d1dc14d555ef4c16b7836553a01cc9884d95e2e6dbbcf94edbc9ad6"
+  },
+  "status": "research and local LLM experiments complete; not product acceptance",
+  "local_model": "mlx-community/Qwen3-4B-4bit",
+  "main_llm_generations": 180,
+  "smoke_generations": 1
+}

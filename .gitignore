@@ -10,3 +10,9 @@ htmlcov/
 .idea/
 .vscode/
 .DS_Store
+
+# Local Yandex credentials (never commit)
+.env.yandex.local
+
+# Local inference runtime and model weights
+.local-llm/
