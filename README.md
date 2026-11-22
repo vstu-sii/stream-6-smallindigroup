@@ -78,7 +78,8 @@ PostgreSQL разворачивается как отдельный контей
 stream-6-smallindigroup/
 ├── .github/
 │   ├── workflows/
-│   │   └── ci.yml                 # Автоматические проверки CI
+│   │   ├── ci.yml                 # Автоматические проверки CI
+│   │   └── evals.yml              # Evals: быстрый срез на PR, полный прогон ночью
 │   └── PULL_REQUEST_TEMPLATE.md  # Шаблон Pull Request
 │
 ├── backend/
@@ -98,6 +99,7 @@ stream-6-smallindigroup/
 ├── frontend/prototype/            # Интерактивные экраны лабы 2, CSV и скриншоты
 ├── database/                     # Схема PostgreSQL, ERD и начальная миграция
 ├── api/                          # OpenAPI-контракты модели и отчёта
+├── tests/evals/                   # Evals-раннер по golden dataset и пороги CI
 │
 ├── docs/
 │   ├── prd.md                     # Сегмент, боли и требования к продукту
@@ -115,6 +117,8 @@ stream-6-smallindigroup/
 │       ├── dod.md                 # Definition of Done артефактов команды
 │       ├── dod-draft.md           # Заготовка DoD (лаба 1, история)
 │       ├── test-plan.md           # Тест-план: уровни и что идёт в CI
+│       ├── metrics-baseline.md    # Факт метрик на baseline (лаба 3)
+│       ├── evals/                 # Результаты прогонов evals (JSON, таблицы)
 │       └── threat-model.md        # Модель угроз
 │
 ├── .env.example                   # Шаблон переменных окружения
@@ -312,6 +316,8 @@ CI предназначен для выполнения следующих оп�
 Workflow настроен на запуск при создании или обновлении Pull Request в `main`, а также при отправке изменений в `main`.
 
 Для выполнения требования лабораторной администратор репозитория должен включить обязательную проверку `Code Quality` для `main` в настройках защиты ветки GitHub.
+
+Качество разбора проверяет отдельный workflow `.github/workflows/evals.yml`: на каждый PR и push в `main` — быстрый срез evals с порогами (`python -m pytest tests/evals -m fast`, PR красный при провале порога), ночью — полный прогон с отчётом. Чтобы провал порога блокировал мёрж, в защиту ветки добавляется проверка `Evals (fast slice)`. Подробнее — [tests/evals/README.md](tests/evals/README.md).
 
 ## Ветвление и Pull Request
 
