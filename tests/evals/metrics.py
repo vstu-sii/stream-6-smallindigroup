@@ -6,7 +6,7 @@
 
 import json
 
-from evals.report import SEVERITY_RANK, build
+from .report import SEVERITY_RANK, build
 
 CODES = {
     "delivery_delay",

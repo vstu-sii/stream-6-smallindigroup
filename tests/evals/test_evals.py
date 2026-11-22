@@ -1,4 +1,4 @@
-"""Быстрый срез evals для CI: python -m pytest evals -m fast.
+"""Быстрый срез evals для CI: python -m pytest tests/evals -m fast.
 
 Первая часть — блокирующие пороги из thresholds.json на baseline. Вторая —
 самопроверка раннера: эталон проходит все цели, а ошибки системы ловятся.
@@ -8,8 +8,8 @@ import copy
 
 import pytest
 
-from evals import dataset, run
-from evals.metrics import CODES, batch_metrics, review_metrics
+from . import dataset, run
+from .metrics import CODES, batch_metrics, review_metrics
 
 pytestmark = pytest.mark.fast
 

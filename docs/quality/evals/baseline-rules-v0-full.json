@@ -57,9 +57,9 @@
       "gb-05"
     ],
     "commit": null,
-    "started_at_utc": "2026-11-22T20:35:22+00:00",
+    "started_at_utc": "2026-11-22T20:51:32+00:00",
     "python": "3.14.0",
-    "p95_seconds": 2.990000939462334e-05,
+    "p95_seconds": 3.409999771974981e-05,
     "cost_rub": 0
   },
   "metrics": {

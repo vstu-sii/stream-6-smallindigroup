@@ -1,6 +1,6 @@
 # Метрики карты качества: факт на baseline (лаба 3)
 
-> Роль: Quality & Safety · Определения и цели — [success-criteria.md](success-criteria.md) · Раннер — [evals/](../../evals/README.md)
+> Роль: Quality & Safety · Определения и цели — [success-criteria.md](success-criteria.md) · Раннер — [tests/evals/](../../tests/evals/README.md)
 
 Это фактические значения метрик из [критериев успеха](success-criteria.md),
 посчитанные evals-раннером. Прототип в API пока не вызывает модель, поэтому
@@ -12,10 +12,10 @@
 
 | | |
 |---|---|
-| Система | `evals/baseline_rules.py`, версия `rules-v0` |
+| Система | `tests/evals/baseline_rules.py`, версия `rules-v0` |
 | Набор | `golden-v2.0.jsonl` (sha256 `dd62ced3eb04…`), `batches-v2.0.jsonl` (sha256 `6b5aadf01a8a…`) |
 | Выборка | `test`: 41 отзыв, 35 пар «отзыв — код»; пакеты `gb-01`…`gb-05` |
-| Команда | `python -m evals.run --slice full --out docs/quality/evals/baseline-rules-v0-full.json --md docs/quality/evals/baseline-rules-v0-full.md` |
+| Команда | `python -m tests.evals.run --slice full --out docs/quality/evals/baseline-rules-v0-full.json --md docs/quality/evals/baseline-rules-v0-full.md` |
 | Результаты | [JSON с ошибками по каждой записи](evals/baseline-rules-v0-full.json) · [таблица](evals/baseline-rules-v0-full.md) · быстрый срез: [JSON](evals/baseline-rules-v0-fast.json), [таблица](evals/baseline-rules-v0-fast.md) |
 | Время и стоимость | меньше 1 мс на отзыв, 0 ₽ — правила не вызывают модель; для LLM замеряются отдельно |
 
@@ -59,9 +59,9 @@
 ## Что дальше
 
 1. AI Engineer подключает LLM-предсказатель к раннеру (`PREDICTORS` в
-   `evals/run.py`) и прогоняет тот же `--slice full`; таблица выше становится
+   `tests/evals/run.py`) и прогоняет тот же `--slice full`; таблица выше становится
    колонкой «baseline» в сравнении.
 2. После этого `critical_missed` и `priority_violations` в
-   `evals/thresholds.json` переводятся с храповика на цель 0.
+   `tests/evals/thresholds.json` переводятся с храповика на цель 0.
 3. `gd-0036` показывает требование к цитате: минимальный фрагмент, а не
    целое предложение — проверить, что промпт модели это требует.

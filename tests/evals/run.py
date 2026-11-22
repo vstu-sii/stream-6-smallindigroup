@@ -1,4 +1,4 @@
-"""Прогон evals: python -m evals.run --slice fast|full [--out results.json] [--md report.md].
+"""Прогон evals: python -m tests.evals.run --slice fast|full [--out results.json] [--md report.md].
 
 Код выхода 1, если на быстром срезе провалена блокирующая проверка
 (thresholds.json → gates). Полный срез только считает цели PRD (targets).
@@ -13,8 +13,8 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from evals import baseline_rules, dataset
-from evals.metrics import batch_metrics, review_metrics
+from . import baseline_rules, dataset
+from .metrics import batch_metrics, review_metrics
 
 THRESHOLDS_FILE = Path(__file__).with_name("thresholds.json")
 PREDICTORS = {"rules": baseline_rules}
