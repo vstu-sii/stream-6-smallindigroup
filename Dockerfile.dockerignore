@@ -1,0 +1,11 @@
+**
+!backend/
+!backend/requirements.txt
+!backend/app/
+!backend/app/*.py
+!frontend/
+!frontend/prototype/
+!frontend/prototype/*.html
+!frontend/prototype/*.css
+!frontend/prototype/*.js
+!frontend/prototype/example.csv

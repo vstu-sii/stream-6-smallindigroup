@@ -1,0 +1,90 @@
+x-backend: &backend
+  image: reviews-analyzer-dev:local
+  pull_policy: never
+  networks: [internal]
+
+x-http-health: &http-health
+  test: ["CMD", "python", "-c", "from urllib.request import urlopen; urlopen('http://127.0.0.1:8000/health', timeout=2).close()"]
+  interval: 5s
+  timeout: 3s
+  retries: 12
+  start_period: 5s
+
+services:
+  web:
+    <<: *backend
+    command: ["python", "-m", "http.server", "8080", "--directory", "/prototype"]
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ./frontend/prototype:/prototype:ro
+    healthcheck:
+      <<: *http-health
+      test: ["CMD", "python", "-c", "from urllib.request import urlopen; urlopen('http://127.0.0.1:8080/', timeout=2).close()"]
+
+  api:
+    <<: *backend
+    build: ./backend
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      storage:
+        condition: service_healthy
+    healthcheck: *http-health
+
+  worker:
+    <<: *backend
+    command: ["uvicorn", "app.dev_stub:app", "--host", "0.0.0.0"]
+    environment:
+      DEV_SERVICE: worker
+      DEV_DEPENDENCIES: http://storage:8000/health,http://model:8000/health
+    depends_on:
+      storage:
+        condition: service_healthy
+      model:
+        condition: service_healthy
+    healthcheck: *http-health
+
+  model:
+    <<: *backend
+    command: ["uvicorn", "app.dev_stub:app", "--host", "0.0.0.0"]
+    environment:
+      DEV_SERVICE: model
+    healthcheck: *http-health
+
+  storage:
+    <<: *backend
+    command: ["uvicorn", "app.dev_stub:app", "--host", "0.0.0.0"]
+    environment:
+      DEV_SERVICE: storage
+      PGHOST: db
+      PGDATABASE: reviews_dev
+      PGUSER: reviews_dev
+      PGPASSWORD: ${DEV_POSTGRES_PASSWORD:-reviews_dev_local}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck: *http-health
+
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: reviews_dev
+      POSTGRES_USER: reviews_dev
+      POSTGRES_PASSWORD: ${DEV_POSTGRES_PASSWORD:-reviews_dev_local}
+    networks: [internal]
+    volumes:
+      - reviews_dev_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/10-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 5s
+
+networks:
+  internal:
+
+volumes:
+  reviews_dev_data:

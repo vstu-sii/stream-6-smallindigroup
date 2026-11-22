@@ -21,7 +21,7 @@
 
 Особое внимание уделяется безопасности публичных ответов: содержание отзывов не должно использоваться как инструкция для системы, а отправка ответа клиенту должна выполняться только после подтверждения уполномоченным пользователем.
 
-На этапе лабораторной № 1 реализуется инфраструктурный каркас проекта. Функциональность анализа отзывов будет разрабатываться в последующих этапах.
+В лабораторной № 1 собран инфраструктурный каркас. Лабораторная № 2 описывает архитектуру MVP и добавляет локальный стенд с заглушками и UI-прототипом.
 
 ## Продуктовая документация
 
@@ -95,6 +95,9 @@ stream-6-smallindigroup/
 │
 ├── front/                         # Frontend (будущая разработка)
 │   └── .gitkeep                   # Сохранение пустой папки в Git
+├── frontend/prototype/            # Интерактивные экраны лабы 2, CSV и скриншоты
+├── database/                     # Схема PostgreSQL, ERD и начальная миграция
+├── api/                          # OpenAPI-контракты модели и отчёта
 │
 ├── docs/
 │   ├── prd.md                     # Сегмент, боли и требования к продукту
@@ -103,6 +106,8 @@ stream-6-smallindigroup/
 │   ├── brief.md                   # Картинка работающего продукта
 │   ├── insights.md                # Методы исследования и статус результатов
 │   ├── deploy.md                  # Инструкция по деплою
+│   ├── architecture/             # C4 Context, Container и локальная проверка
+│   ├── adr/                      # Архитектурные решения
 │   └── quality/                   # Quality & Safety
 │       ├── success-criteria.md    # Критерии успеха и метрики
 │       ├── golden-dataset-plan.md # План golden dataset
@@ -115,13 +120,34 @@ stream-6-smallindigroup/
 ├── .env.example                   # Шаблон переменных окружения
 ├── .gitignore
 ├── compose.yaml                   # Сервисы локальной среды
+├── compose.dev.yml                # Dev-стенд лабы 2
+├── Dockerfile                    # Образ Render с API и UI-прототипом
+├── Dockerfile.dockerignore       # Файлы, доступные сборке образа Render
+├── aact.config.ts                 # Правила проверки архитектуры
 └── README.md
 
 ```
 
 Структура будет расширяться по мере реализации бизнес-логики, интеграций с источниками отзывов и AI-компонентов.
 
-## Локальный запуск
+## Лабораторная № 2 · Delivery
+
+Из корня репозитория:
+
+```bash
+docker compose -f compose.dev.yml up -d --wait
+docker compose -f compose.dev.yml ps
+npx --yes aact@3.0.0-beta.29 check
+```
+
+Прототип открывается по адресу [localhost:8080](http://localhost:8080/), API — по адресу [localhost:8000/health](http://localhost:8000/health). Прототип использует демонстрационные данные. Текущий Compose лабы 1 и dev-стенд используют один и тот же порт API, поэтому перед запуском dev-стенда достаточно остановить API первого стенда, если он запущен.
+
+- [Архитектура, сервисы и проверка](docs/architecture/README.md)
+- [Схема PostgreSQL](database/schema.sql), [ERD](database/erd.puml) и [миграции](database/migrations/README.md)
+- [Контракт AI-модели](api/openapi.yaml) и [контракт чтения отчёта](api/report.openapi.yaml)
+- Скриншоты прототипа — [проверка CSV](frontend/prototype/screenshots/01-upload.png), [отчёт по товарам](frontend/prototype/screenshots/02-report.png), [карточка проблемы](frontend/prototype/screenshots/03-review.png)
+
+## Локальный запуск каркаса лабы 1
 
 ### Требования
 
@@ -332,13 +358,12 @@ Workflow настроен на запуск при создании или об�
 
 ## Production
 
-По требованиям лабораторной № 1 приложение должно быть развёрнуто в облачном окружении и доступно всем участникам команды по публичному URL.
+На Render доступны FastAPI и статический прототип лабы 2. Прототип проверяет CSV в браузере и показывает демонстрационный отчёт.
 
-На первом этапе в production размещается минимальная заглушка FastAPI.
+- [Открыть прототип](https://stream-6-smallindigroup.onrender.com/prototype/)
+- [API](https://stream-6-smallindigroup.onrender.com/), [Swagger UI](https://stream-6-smallindigroup.onrender.com/docs) и [проверка состояния](https://stream-6-smallindigroup.onrender.com/health)
 
-**Production URL:** [Reviews Analyzer API](https://stream-6-smallindigroup.onrender.com/).
-
-Инструкция по развёртыванию и проверке приложения находится в [docs/deploy.md](docs/deploy.md).
+Render собирает корневой `Dockerfile` из ветки `lab2-delivery-design`. Параметры сборки и порядок проверки описаны в [docs/deploy.md](docs/deploy.md).
 
 ## Команда
 
@@ -351,9 +376,7 @@ Workflow настроен на запуск при создании или об�
 
 ## Статус проекта
 
-**Лабораторная № 1 — Инициация проекта.**
-
-На данном этапе формируется техническая основа для дальнейшей командной разработки.
+**Лабораторная № 2 — Проектирование системы.** Артефакты Delivery описывают MVP и дают локальное окружение для следующего этапа.
 
 Готовность инфраструктуры оценивается по следующим критериям:
 

@@ -1,0 +1,136 @@
+openapi: 3.1.0
+info:
+  title: Reviews Analyzer — Report API
+  version: 0.2.0-draft
+  description: Проект публичного контракта чтения результата разбора CSV.
+servers:
+  - url: /
+    description: Тот же источник, с которого открыт интерфейс продавца.
+security:
+  - sellerSession: []
+paths:
+  /api/v1/batches/{batch_id}/report:
+    get:
+      operationId: getBatchReport
+      summary: Получить готовый или неполный отчёт по пакету
+      parameters:
+        - name: batch_id
+          in: path
+          required: true
+          schema: { type: string, minLength: 1 }
+      responses:
+        '200':
+          description: Доступный результат обработки.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        '404':
+          description: Пакет с таким идентификатором отсутствует.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportUnavailable'
+        '401':
+          description: Требуется действующая сессия продавца.
+        '409':
+          description: Пакет в очереди, в работе или завершился с ошибкой без доступного отчёта.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportUnavailable'
+components:
+  securitySchemes:
+    sellerSession:
+      type: apiKey
+      in: cookie
+      name: seller_session
+      description: Предлагаемый способ передавать сессию браузера. Отчёт доступен владельцу пакета.
+  schemas:
+    Report:
+      type: object
+      additionalProperties: false
+      required: [batch_id, incomplete, products]
+      properties:
+        batch_id: { type: string, minLength: 1 }
+        incomplete:
+          type: boolean
+          description: Часть принятых отзывов требует проверки или осталась без результата разбора.
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductReport'
+    ProductReport:
+      type: object
+      additionalProperties: false
+      required: [platform, product_id, review_count, flagged_review_count, groups]
+      properties:
+        platform:
+          type: string
+          enum: [wildberries, ozon, yandex_market]
+        product_id: { type: string, minLength: 1 }
+        review_count:
+          type: integer
+          minimum: 1
+          description: Число принятых отзывов этого товара в пакете, включая помеченные.
+        flagged_review_count:
+          type: integer
+          minimum: 0
+          description: Число отзывов товара с suspicious=true.
+        groups:
+          type: array
+          description: Группы уникальны по code внутри товара. Сортировка по серьёзности, затем по числу отзывов по убыванию.
+          items:
+            $ref: '#/components/schemas/ProblemGroup'
+    ProblemGroup:
+      type: object
+      additionalProperties: false
+      required: [code, title, severity, review_count, review_share, owner, recommendation, evidence]
+      properties:
+        code: { type: string, minLength: 1 }
+        title: { type: string, minLength: 1 }
+        severity:
+          type: string
+          enum: [critical, high, medium, low]
+        review_count:
+          type: integer
+          minimum: 1
+          description: Число разных отзывов с подтверждённой цитатой в группе.
+        review_share:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Число отзывов группы, делённое на число принятых отзывов о товаре.
+        owner:
+          type: [string, 'null']
+          enum: [seller, marketplace, null]
+        recommendation: { type: string, minLength: 1 }
+        evidence:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ReviewEvidence'
+    ReviewEvidence:
+      type: object
+      additionalProperties: false
+      required: [review_id, text, start, end]
+      properties:
+        review_id: { type: string, minLength: 1 }
+        text: { type: string, minLength: 1 }
+        start:
+          type: integer
+          minimum: 0
+          description: Начало цитаты в кодовых точках исходного текста.
+        end:
+          type: integer
+          minimum: 1
+          description: Позиция после последнего символа цитаты.
+    ReportUnavailable:
+      type: object
+      additionalProperties: false
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          enum: [BATCH_NOT_FOUND, REPORT_PENDING, REPORT_FAILED]
+        message: { type: string, minLength: 1 }
