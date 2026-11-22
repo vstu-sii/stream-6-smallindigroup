@@ -121,6 +121,8 @@ stream-6-smallindigroup/
 ├── .gitignore
 ├── compose.yaml                   # Сервисы локальной среды
 ├── compose.dev.yml                # Dev-стенд лабы 2
+├── Dockerfile                    # Образ Render с API и UI-прототипом
+├── Dockerfile.dockerignore       # Файлы, доступные сборке образа Render
 ├── aact.config.ts                 # Правила проверки архитектуры
 └── README.md
 
@@ -356,13 +358,12 @@ Workflow настроен на запуск при создании или об�
 
 ## Production
 
-По требованиям лабораторной № 1 приложение должно быть развёрнуто в облачном окружении и доступно всем участникам команды по публичному URL.
+На Render доступны FastAPI и статический прототип лабы 2. Прототип проверяет CSV в браузере и показывает демонстрационный отчёт.
 
-На первом этапе в production размещается минимальная заглушка FastAPI.
+- [Открыть прототип](https://stream-6-smallindigroup.onrender.com/prototype/)
+- [API](https://stream-6-smallindigroup.onrender.com/), [Swagger UI](https://stream-6-smallindigroup.onrender.com/docs) и [проверка состояния](https://stream-6-smallindigroup.onrender.com/health)
 
-**Production URL:** [Reviews Analyzer API](https://stream-6-smallindigroup.onrender.com/).
-
-Инструкция по развёртыванию и проверке приложения находится в [docs/deploy.md](docs/deploy.md).
+Render собирает корневой `Dockerfile` из ветки `lab2-delivery-design`. Параметры сборки и порядок проверки описаны в [docs/deploy.md](docs/deploy.md).
 
 ## Команда
 
