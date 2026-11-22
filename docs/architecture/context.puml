@@ -1,0 +1,11 @@
+@startuml ReviewsAnalyzer_Context
+!include <C4/C4_Context>
+LAYOUT_LEFT_RIGHT()
+
+title Reviews Analyzer — контекст MVP
+
+Person(seller, "Продавец текстиля", "Разбирает клиентские отзывы и выбирает, какую проблему исправить")
+System(reviews, "Reviews Analyzer", "Превращает подготовленный CSV в отчёт о проблемах по товарам с приоритетами, цитатами и рекомендациями")
+
+Rel(seller, reviews, "Загружает CSV; открывает отчёт; проверяет цитаты", "HTTPS")
+@enduml

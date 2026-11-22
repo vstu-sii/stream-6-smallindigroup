@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reviews Analyzer · Разбор отзывов</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="csv.js" defer></script>
+  <script src="prototype.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="#upload"><span class="logo-mark" aria-hidden="true">▥</span> Reviews Analyzer</a>
+    <span class="demo-label">Демонстрационные данные</span>
+  </header>
+  <div class="workspace">
+    <aside class="sidebar">
+      <nav aria-label="Разделы прототипа">
+        <a href="#upload" data-page="upload">Загрузка отзывов</a>
+        <a href="#report" data-page="report">Отчёт по проблемам</a>
+        <a href="#review" data-page="review">Карточка проблемы</a>
+      </nav>
+    </aside>
+    <main>
+      <section id="upload" aria-labelledby="upload-title">
+        <p class="eyebrow">Новый разбор</p>
+        <h1 id="upload-title">Загрузите отзывы</h1>
+        <p class="intro">Добавьте CSV с отзывами о товарах. В отчёте будут повторяющиеся проблемы, их серьёзность и исходные цитаты.</p>
+        <div class="card upload-card">
+          <form id="upload-form">
+            <label class="file-heading" for="csv-file">CSV с отзывами</label>
+            <p id="csv-help">До 100 отзывов из Wildberries, Ozon и Яндекс Маркета.</p>
+            <input type="file" id="csv-file" accept=".csv,text/csv" aria-describedby="csv-help file-status" required>
+            <p class="notice" id="file-status" role="status">Проверка строк выполняется в браузере. Отчёт использует демонстрационные данные.</p>
+            <section class="validation" id="validation" aria-labelledby="validation-title" hidden>
+              <h2 id="validation-title">Проверка строк</h2>
+              <p id="validation-summary"></p>
+              <ul id="row-errors"></ul>
+            </section>
+            <div class="actions">
+              <button type="submit" class="primary" id="confirm-rows" disabled>Подтвердить строки</button>
+              <a href="example.csv" download>Скачать пример CSV</a>
+            </div>
+          </form>
+        </div>
+        <div class="card data-note">
+          <h2>Столбцы файла</h2>
+          <p>Кодировка UTF-8. Обязательные столбцы — <code>platform</code>, <code>product_id</code>, <code>review_id</code>, <code>rating</code> и <code>text</code>. Необязательная дата — <code>date</code> в формате ГГГГ-ММ-ДД.</p>
+        </div>
+      </section>
+
+      <section id="report" aria-labelledby="report-title" hidden>
+        <p class="eyebrow">Обзор пакета</p>
+        <h1 id="report-title">Проблемы по отзывам</h1>
+        <p class="intro">Пакет «Текстиль · ноябрь» · Wildberries и Ozon</p>
+        <div class="stats">
+          <div class="card metric"><span>Отзывов в пакете</span><strong>12</strong></div>
+          <div class="card metric"><span>Групп проблем</span><strong>3</strong></div>
+          <div class="card metric"><span>Помечено моделью</span><strong>1</strong></div>
+        </div>
+        <p class="notice report-note">Помеченный отзыв остаётся в подсчёте. Метка указывает на подозрение в накрутке.</p>
+        <article class="card report-card">
+          <h2>Комплект «Лён»</h2>
+          <p class="product-meta">Wildberries · WB-104 · 6 отзывов · 0 помечено</p>
+          <div class="problem">
+            <div><span class="pill high">Высокий</span><h3><a href="#review">Ткань линяет после стирки</a></h3>
+              <p>3 из 6 отзывов · 50% · Зона ответственности — продавец</p></div>
+            <p class="action">Проверить стойкость красителя в текущей партии.</p>
+          </div>
+          <div class="problem">
+            <div><span class="pill medium">Средний</span><h3>Наволочка меньше заявленного</h3>
+              <p>2 из 6 отзывов · 33% · Зона ответственности — продавец</p></div>
+            <p class="action">Сверить размеры партии с карточкой товара.</p>
+          </div>
+        </article>
+        <article class="card report-card">
+          <h2>Плед «Берег»</h2>
+          <p class="product-meta">Ozon · OZ-207 · 6 отзывов · 1 помечен</p>
+          <div class="problem">
+            <div><span class="pill low">Низкий</span><h3>Помятая упаковка</h3>
+              <p>2 из 6 отзывов · 33% · Зона ответственности — площадка</p></div>
+            <p class="action">Проверить упаковку перед отгрузкой.</p>
+          </div>
+        </article>
+      </section>
+
+      <section id="review" aria-labelledby="review-title" hidden>
+        <a class="back" href="#report">К отчёту</a>
+        <p class="eyebrow">Доказательство проблемы</p>
+        <h1 id="review-title">Ткань линяет после стирки</h1>
+        <p class="intro">Комплект «Лён» · Wildberries · WB-104 · 3 из 6 отзывов · 50%</p>
+        <div class="card detail">
+          <h2>Цитаты из отзывов</h2>
+          <dl class="evidence-list">
+            <dt>WB-R101 · 2 из 5</dt>
+            <dd><blockquote>«После стирки комплект полинял.»</blockquote></dd>
+            <dt>WB-R102 · 2 из 5</dt>
+            <dd><blockquote>«После первой стирки вода стала синей, а наволочка выцвела.»</blockquote></dd>
+            <dt>WB-R103 · 2 из 5</dt>
+            <dd><blockquote>«Первая стирка — и цвет ушёл.»</blockquote></dd>
+          </dl>
+        </div>
+        <div class="card data-note">
+          <h2>Рекомендация</h2>
+          <p>Проверить стойкость красителя в текущей партии и сверить инструкцию по стирке на этикетке.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

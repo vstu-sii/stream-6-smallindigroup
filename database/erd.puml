@@ -1,0 +1,79 @@
+@startuml ReviewsAnalyzer_ERD
+hide circle
+skinparam linetype ortho
+title Reviews Analyzer — пакеты, отзывы и отчёты
+
+entity review_batches {
+  * id : bigint <<PK>>
+  --
+  created_at : timestamptz
+}
+entity products {
+  * platform : text <<PK>>
+  * external_id : text <<PK>>
+}
+entity reviews {
+  * id : bigint <<PK>>
+  --
+  platform, product_external_id : text <<FK>>
+  external_id : text
+}
+note right of reviews
+  UNIQUE (platform, external_id)
+end note
+entity batch_reviews {
+  * batch_id : bigint <<PK, FK>>
+  * review_id : bigint <<PK, FK>>
+  --
+  platform, product_external_id : text <<FK>>
+  rating : smallint
+  body : text
+  published_on : date
+  suspicious : boolean
+}
+entity analysis_runs {
+  * id : bigint <<PK>>
+  --
+  batch_id : bigint <<FK, UNIQUE>>
+  status : text
+  attempt_count : integer
+  lease_until : timestamptz
+  error_code : text
+  created_at : timestamptz
+}
+entity problem_groups {
+  * id : bigint <<PK>>
+  --
+  run_id, batch_id : bigint <<FK>>
+  platform, product_external_id : text <<FK>>
+  problem_code : text
+  title : text
+  severity : text
+  priority : integer
+  owner : text
+  recommendation : text
+}
+note right of problem_groups
+  UNIQUE (run_id, platform,
+          product_external_id, problem_code)
+end note
+entity problem_evidence {
+  * group_id : bigint <<PK, FK>>
+  * review_id : bigint <<PK, FK>>
+  * start_offset : integer <<PK>>
+  * end_offset : integer <<PK>>
+  --
+  batch_id : bigint <<FK>>
+  platform, product_external_id : text <<FK>>
+  excerpt : text
+}
+
+products ||--o{ reviews
+review_batches ||--o{ batch_reviews
+reviews ||--o{ batch_reviews
+review_batches ||--o| analysis_runs
+products ||--o{ problem_groups
+analysis_runs ||--o{ problem_groups
+problem_groups ||--o{ problem_evidence
+batch_reviews ||--o{ problem_evidence
+@enduml

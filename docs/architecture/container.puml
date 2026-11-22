@@ -1,0 +1,24 @@
+@startuml ReviewsAnalyzer_Containers
+!include <C4/C4_Container>
+LAYOUT_LEFT_RIGHT()
+
+title Reviews Analyzer — контейнеры MVP
+
+Person(seller, "Продавец текстиля", "Работает с пакетом отзывов в браузере")
+
+System_Boundary(reviews, "Reviews Analyzer") {
+    Container(web, "Веб-интерфейс", "HTML / CSS / JavaScript", "Загрузка файла, статус разбора и отчёт")
+    Container(api, "API приложений", "FastAPI", "Проверяет CSV, создаёт задание, выдаёт состояние и отчёт", $tags="gateway")
+    Container(worker, "Воркер анализа", "Python", "Берёт задания, запрашивает модель, проверяет цитаты и агрегирует проблемы")
+    Container(model, "Модельный сервис", "HTTP / JSON", "Разбирает порции отзывов и возвращает структурированные наблюдения")
+    Container(storage, "Сервис хранения", "FastAPI", "Единая точка доступа к пакетам, отзывам, заданиям и отчётам", $tags="repo")
+    ContainerDb(db, "База отзывов", "PostgreSQL", "Отзывы, задания и результаты анализа")
+}
+
+Rel(seller, web, "Загружает CSV и открывает отчёт", "HTTPS")
+Rel(web, api, "Передаёт файл и запрашивает состояние и отчёт", "HTTP / JSON")
+Rel(api, storage, "Записывает пакет и читает состояние и отчёт", "HTTP / JSON")
+Rel(worker, storage, "Забирает задания и сохраняет результаты", "HTTP / JSON")
+Rel(worker, model, "Передаёт порции и получает наблюдения", "HTTP / JSON")
+Rel(storage, db, "Читает и записывает данные", "PostgreSQL / TCP")
+@enduml

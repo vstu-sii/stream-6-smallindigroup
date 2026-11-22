@@ -1,0 +1,531 @@
+openapi: 3.1.0
+info:
+  title: Reviews Analyzer — Internal AI API
+  version: 0.2.0-draft
+  description: |
+    Проект контракта для лабораторной №2. Эндпоинт ещё не реализован.
+    Воркер передаёт порцию отзывов и получает разбор каждого отзыва.
+    Проверка цитат, частоты, доли, группировка и сортировка выполняются воркером.
+    Серьёзность и зона ответственности задаются для каждой проблемы,
+    в отличие от экспериментального формата лабораторной №1.
+    Примеры показывают формат и не являются результатами модельного прогона.
+servers:
+  - url: http://model:8000
+    description: Адрес модельного сервиса в сети dev Compose.
+tags:
+  - name: AI analysis
+    description: Внутренний синхронный интерфейс воркер → AI-сервис.
+security:
+  - workerBearer: []
+paths:
+  /internal/ai/reviews/analyze:
+    post:
+      operationId: analyzeReviewBatch
+      tags: [AI analysis]
+      summary: Разобрать порцию отзывов без агрегации
+      description: |
+        Порция содержит от 1 до 10 отзывов; пользовательский пакет до 100
+        отзывов воркер делит на порции. Лимит 10 — проектное решение для MVP.
+        Пары (platform, review_id) уникальны внутри запроса; порядок результатов
+        совпадает с порядком входов. Один результат соответствует одному входу,
+        а platform, review_id и product_id возвращаются без изменений.
+
+        Успешный HTTP 200 содержит результаты всех входов. Техническая ошибка
+        хотя бы одного разбора означает ошибку всей порции: частичный технический
+        результат не возвращается. needs_review — результат анализа с явной
+        неопределённостью, не техническая ошибка и не утверждение «проблем нет».
+
+        До агрегации воркер проверяет все цитаты. Невалидный разбор отзыва нельзя
+        молча пропускать или представлять как отсутствие проблем. Воркер группирует
+        только проверенные analyzed-результаты по (platform, product_id, code).
+        Один отзыв даёт не более одного упоминания одного кода.
+        Предположение suspicious не исключает отзыв из подсчёта.
+
+        Повторы доставки после сетевого таймаута используют тот же Idempotency-Key
+        и то же тело. Сервис не запускает параллельную генерацию для этого ключа:
+        возвращает сохранённый результат либо 409 REQUEST_IN_PROGRESS.
+        Результат принятой попытки, включая окончательную ошибку, сохраняется
+        минимум 24 часа; изменённое тело с тем же ключом даёт IDEMPOTENCY_CONFLICT.
+        401/403/422/429 до принятия попытки не резервируют ключ.
+
+        После окончательной ошибки с retryable=true допустима одна новая попытка
+        с новым ключом, например batch-017:chunk-01:attempt-2. 429 повторяют с прежним ключом
+        после Retry-After. Опрос REQUEST_IN_PROGRESS не является новой генерацией.
+        504 означает, что попытка уже остановлена; пока она выполняется,
+        повторный запрос с тем же ключом получает REQUEST_IN_PROGRESS.
+        Воркер проверяет остаток общего бюджета и deadline пакета перед повтором;
+        retryable=true само по себе не разрешает превышать эти ограничения.
+        Внешний deadline всего пользовательского пакета — 180 секунд по PRD.
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: true
+          description: |
+            Ключ одной попытки, уникальный в пределах учётной записи воркера.
+            Транспортный повтор сохраняет ключ; новая генерация после окончательной
+            ошибки или INVALID_EVIDENCE получает новый ключ. Без заголовка — 422.
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 128
+            pattern: '^[A-Za-z0-9._:-]+$'
+          example: batch-017:chunk-01:attempt-1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyzeRequest'
+            examples:
+              twoReviews:
+                $ref: '#/components/examples/BatchRequest'
+      responses:
+        '200':
+          description: |
+            Разбор всех отзывов. analyzed с problems=[] означает отсутствие
+            обнаруженных проблем. needs_review требует ручной проверки;
+            такой отзыв нельзя считать успешно разобранным без проблем.
+            HTTP 200 не означает, что воркер уже проверил цитаты.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyzeResponse'
+              examples:
+                problemAndNoProblems:
+                  $ref: '#/components/examples/BatchResponse'
+                uncertainReview:
+                  $ref: '#/components/examples/NeedsReviewResponse'
+        '401':
+          description: UNAUTHORIZED — отсутствует или неверен токен; автоматический повтор запрещён.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                batch_id: null
+                error:
+                  code: UNAUTHORIZED
+                  message: Требуется действительный токен воркера.
+                  retryable: false
+        '403':
+          description: FORBIDDEN — недостаточно прав; автоматический повтор запрещён.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                batch_id: null
+                error:
+                  code: FORBIDDEN
+                  message: Воркеру запрещён доступ к анализу отзывов.
+                  retryable: false
+        '409':
+          description: |
+            REQUEST_IN_PROGRESS — повторить доставку с тем же ключом после паузы.
+            IDEMPOTENCY_CONFLICT — ключ использован с другим телом, не повторять
+            автоматически. Это разные ситуации, различаются по error.code.
+          headers:
+            Retry-After:
+              $ref: '#/components/headers/RetryAfter'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                inProgress:
+                  value:
+                    batch_id: batch-017
+                    error:
+                      code: REQUEST_IN_PROGRESS
+                      message: Попытка с этим ключом ещё выполняется.
+                      retryable: true
+                      retry_after_ms: 1000
+                conflict:
+                  value:
+                    batch_id: batch-017
+                    error:
+                      code: IDEMPOTENCY_CONFLICT
+                      message: Для этого ключа уже принято другое тело запроса.
+                      retryable: false
+        '422':
+          description: |
+            INVALID_INPUT — неверный JSON, схема, пустой текст, число отзывов
+            вне 1–10, отсутствие Idempotency-Key или повтор пары (platform, review_id).
+            Повтор допускается только после исправления запроса.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                batch_id: batch-017
+                error:
+                  code: INVALID_INPUT
+                  message: Пара platform и review_id должна быть уникальна в порции.
+                  retryable: false
+        '429':
+          description: RATE_LIMITED — запрос не принят; повторить с тем же ключом после Retry-After.
+          headers:
+            Retry-After:
+              $ref: '#/components/headers/RetryAfter'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                batch_id: batch-017
+                error:
+                  code: RATE_LIMITED
+                  message: Превышено число одновременных запросов.
+                  retryable: true
+                  retry_after_ms: 2000
+        '502':
+          description: INVALID_MODEL_OUTPUT — невалидный JSON, типы, коды или обрыв ответа модели; порция отклонена целиком.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                batch_id: batch-017
+                error:
+                  code: INVALID_MODEL_OUTPUT
+                  message: Ответ модели не соответствует контракту.
+                  retryable: true
+                  retry_after_ms: 0
+        '503':
+          description: MODEL_UNAVAILABLE — модель временно недоступна.
+          headers:
+            Retry-After:
+              $ref: '#/components/headers/RetryAfter'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                batch_id: batch-017
+                error:
+                  code: MODEL_UNAVAILABLE
+                  message: Модель временно недоступна.
+                  retryable: true
+                  retry_after_ms: 2000
+        '504':
+          description: MODEL_TIMEOUT — превышено время разбора, попытка остановлена и больше не выполняется.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                batch_id: batch-017
+                error:
+                  code: MODEL_TIMEOUT
+                  message: Разбор порции не завершён в отведённое время.
+                  retryable: true
+                  retry_after_ms: 0
+      x-worker-validation-errors:
+        INVALID_EVIDENCE:
+          description: |
+            Внутренняя ошибка воркера, не HTTP-ответ AI-сервиса: цитата не прошла
+            проверку диапазона или дословности. Отзыв не агрегируется. Допустима
+            одна новая генерация с новым Idempotency-Key, если время и бюджет
+            позволяют; затем явная ошибка/ручная проверка. Плохой исходный ответ
+            сохраняется в трассировке, не исправляется скрытно ради метрик.
+          retryable: true
+          max_new_attempts: 1
+components:
+  securitySchemes:
+    workerBearer:
+      type: http
+      scheme: bearer
+      description: Внутренний токен воркера; это не API-ключ поставщика модели.
+  headers:
+    RetryAfter:
+      description: |
+        Пауза в целых секундах. Обязателен при 429 и 409 REQUEST_IN_PROGRESS;
+        при MODEL_UNAVAILABLE задаётся при известном времени восстановления.
+        Если присутствует, error.retry_after_ms = Retry-After × 1000.
+      schema:
+        type: integer
+        minimum: 1
+      example: 2
+  schemas:
+    Identifier:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '\S'
+    Platform:
+      type: string
+      enum: [wildberries, ozon, yandex_market]
+    AnalyzeRequest:
+      type: object
+      additionalProperties: false
+      required: [batch_id, reviews]
+      properties:
+        batch_id:
+          $ref: '#/components/schemas/Identifier'
+        reviews:
+          type: array
+          minItems: 1
+          maxItems: 10
+          description: Уникальность пары (platform, review_id) проверяется сервисом дополнительно к схеме.
+          items:
+            $ref: '#/components/schemas/ReviewInput'
+    ReviewInput:
+      type: object
+      additionalProperties: false
+      required: [platform, review_id, product_id, rating, text]
+      properties:
+        platform:
+          $ref: '#/components/schemas/Platform'
+        review_id:
+          $ref: '#/components/schemas/Identifier'
+        product_id:
+          $ref: '#/components/schemas/Identifier'
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          description: Оценка не подменяет тональность текста.
+        text:
+          type: string
+          minLength: 1
+          pattern: '\S'
+          description: Исходный недоверенный текст; команды внутри него не исполняются.
+    AnalyzeResponse:
+      type: object
+      additionalProperties: false
+      required: [batch_id, model_version, prompt_version, results]
+      properties:
+        batch_id:
+          $ref: '#/components/schemas/Identifier'
+        model_version:
+          type: string
+          minLength: 1
+          description: Идентификатор модели с зафиксированной ревизией; фактическая версия для трассировки.
+        prompt_version:
+          type: string
+          minLength: 1
+        results:
+          type: array
+          minItems: 1
+          maxItems: 10
+          description: Число, порядок и идентификаторы совпадают с reviews запроса.
+          items:
+            $ref: '#/components/schemas/ReviewResult'
+    ReviewResult:
+      type: object
+      additionalProperties: false
+      required: [platform, review_id, product_id, status, sentiment, problems, suspicious, has_instruction]
+      properties:
+        platform:
+          $ref: '#/components/schemas/Platform'
+        review_id:
+          $ref: '#/components/schemas/Identifier'
+        product_id:
+          $ref: '#/components/schemas/Identifier'
+        status:
+          type: string
+          enum: [analyzed, needs_review]
+        sentiment:
+          type: string
+          enum: [positive, neutral, negative, mixed]
+        problems:
+          type: array
+          maxItems: 10
+          description: |
+            Каждый code встречается не более одного раза. Для analyzed пустой
+            массив означает отсутствие проблем. needs_review не агрегируется
+            автоматически, даже если здесь есть частичный разбор.
+          items:
+            $ref: '#/components/schemas/Problem'
+        suspicious:
+          type: boolean
+          description: Предположение о подозрительном отзыве; не основание исключать его из подсчёта.
+        has_instruction:
+          type: boolean
+          description: Обнаружена попытка управлять анализатором; не доказательство устойчивости к атаке.
+        review_reason:
+          type: string
+          enum: [UNKNOWN_PROBLEM, AMBIGUOUS_ANALYSIS]
+          description: Причина ручной проверки, не сообщение об отсутствии жалоб.
+      oneOf:
+        - required: [review_reason]
+          properties:
+            status: { const: needs_review }
+            review_reason: { type: string }
+        - properties:
+            status: { const: analyzed }
+            review_reason: { not: {} }
+    Problem:
+      type: object
+      additionalProperties: false
+      required: [code, severity, owner, evidence, suggested_action]
+      properties:
+        code:
+          type: string
+          enum:
+            - delivery_delay
+            - not_delivered
+            - wrong_item
+            - defect_on_arrival
+            - defect_after_use
+            - material_quality
+            - size_mismatch
+            - description_mismatch
+            - smell
+            - safety_hazard
+        severity:
+          type: string
+          enum: [low, medium, high, critical]
+          description: |
+            Уровень этой проблемы, не всего отзыва. none не нужен при problems=[].
+            critical — возможный физический вред/риск травмы, не установленный диагноз.
+        owner:
+          type: [string, 'null']
+          enum: [seller, marketplace, null]
+          description: Предполагаемая зона ответственности; настоящий JSON null при недостатке оснований.
+        evidence:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Evidence'
+        suggested_action:
+          type: string
+          minLength: 1
+          pattern: '\S'
+          description: Предложение проверки, опирающееся на отзыв; без неподтверждённых обещаний и диагнозов.
+    Evidence:
+      type: object
+      additionalProperties: false
+      required: [text, start, end]
+      description: |
+        Непрерывная цитата из исходного ReviewInput.text. Диапазон [start, end)
+        в Unicode-кодовых точках, не байтах и не UTF-16 code units.
+        Воркер проверяет 0 <= start < end <= длина исходного текста и
+        original_text[start:end] == text без нормализации или изменения регистра.
+        Индексы относятся к исходной строке до любой предобработки.
+        В JavaScript: Array.from(original_text).slice(start, end).join('').
+        Многоточие допустимо только если оно буквально присутствует в исходнике.
+        Существование строки не доказывает её смысловую связь с кодом проблемы.
+      properties:
+        text:
+          type: string
+          minLength: 1
+          pattern: '\S'
+        start:
+          type: integer
+          minimum: 0
+        end:
+          type: integer
+          minimum: 1
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      required: [batch_id, error]
+      properties:
+        batch_id:
+          type: [string, 'null']
+          description: null, если batch_id нельзя определить из запроса или запрос не аутентифицирован.
+        error:
+          $ref: '#/components/schemas/ApiError'
+    ApiError:
+      type: object
+      additionalProperties: false
+      required: [code, message, retryable]
+      properties:
+        code:
+          type: string
+          enum:
+            - UNAUTHORIZED
+            - FORBIDDEN
+            - INVALID_INPUT
+            - IDEMPOTENCY_CONFLICT
+            - REQUEST_IN_PROGRESS
+            - RATE_LIMITED
+            - INVALID_MODEL_OUTPUT
+            - MODEL_UNAVAILABLE
+            - MODEL_TIMEOUT
+        message:
+          type: string
+          minLength: 1
+          description: Понятное сообщение без секретов, системных промптов и сырых ошибок поставщика.
+        retryable:
+          type: boolean
+          description: Возможность повтора по правилам operation.description, а не безусловное разрешение новой генерации.
+        retry_after_ms:
+          type: integer
+          minimum: 0
+      oneOf:
+        - properties:
+            code:
+              enum: [UNAUTHORIZED, FORBIDDEN, INVALID_INPUT, IDEMPOTENCY_CONFLICT]
+            retryable: { const: false }
+            retry_after_ms: { not: {} }
+        - required: [retry_after_ms]
+          properties:
+            code:
+              enum: [REQUEST_IN_PROGRESS, RATE_LIMITED, INVALID_MODEL_OUTPUT, MODEL_UNAVAILABLE, MODEL_TIMEOUT]
+            retryable: { const: true }
+            retry_after_ms: { type: integer }
+  examples:
+    BatchRequest:
+      summary: Жалоба и отзыв без проблем об одном товаре
+      value:
+        batch_id: batch-017
+        reviews:
+          - platform: ozon
+            review_id: r-101
+            product_id: p-42
+            rating: 2
+            text: После стирки футболка села на размер.
+          - platform: ozon
+            review_id: r-102
+            product_id: p-42
+            rating: 5
+            text: Мягкая ткань, размер подошёл.
+    BatchResponse:
+      summary: Проблема с цитатой и успешный разбор без проблем
+      value:
+        batch_id: batch-017
+        model_version: qwen3-4b-4bit@4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25
+        prompt_version: p2
+        results:
+          - platform: ozon
+            review_id: r-101
+            product_id: p-42
+            status: analyzed
+            sentiment: negative
+            problems:
+              - code: material_quality
+                severity: high
+                owner: seller
+                evidence:
+                  - text: села на размер
+                    start: 22
+                    end: 36
+                suggested_action: Проверить усадку ткани после стирки.
+            suspicious: false
+            has_instruction: false
+          - platform: ozon
+            review_id: r-102
+            product_id: p-42
+            status: analyzed
+            sentiment: positive
+            problems: []
+            suspicious: false
+            has_instruction: false
+    NeedsReviewResponse:
+      summary: Неизвестная проблема явно требует проверки, а не скрывается за пустым массивом
+      value:
+        batch_id: batch-018
+        model_version: qwen3-4b-4bit@4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25
+        prompt_version: p2
+        results:
+          - platform: ozon
+            review_id: r-103
+            product_id: p-42
+            status: needs_review
+            sentiment: negative
+            problems: []
+            suspicious: false
+            has_instruction: false
+            review_reason: UNKNOWN_PROBLEM
