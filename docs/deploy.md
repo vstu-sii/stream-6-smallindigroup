@@ -2,33 +2,31 @@
 
 Для продакшен-окружения проекта **Reviews Analyzer** выбран [Render.com](https://render.com).
 
-В рамках лабораторной № 1 разворачивается минимальное FastAPI-приложение с двумя endpoint'ами: `GET /` и `GET /health`. В дальнейшем приложение будет расширяться без необходимости заново настраивать инфраструктуру.
+В облаке работает FastAPI и статический прототип лабы 2 по пути `/prototype/`. Прототип проверяет CSV в браузере и показывает демонстрационный отчёт. PostgreSQL и заглушки запускаются отдельно в локальном Compose.
 
 ## Хостинг: Render.com
 
 Render выбран благодаря поддержке Docker, интеграции с GitHub, автоматическому развёртыванию и возможности получить публичный HTTPS-адрес.
 
-На первом этапе в облаке размещается только backend. PostgreSQL используется в локальном Docker Compose.
-
 ## Как задеплоить
 
 1. Авторизоваться на [render.com](https://render.com) через GitHub.
 2. Выбрать **New → Web Service** → **Git Provider** и подключить репозиторий `vstu-sii/stream-6-smallindigroup`. Ветка должна быть опубликована на GitHub, а интеграции Render нужен доступ к репозиторию.
-3. Указать ветку `lab1-delivery-initiation` и следующие параметры:
+3. Для демонстрации лабы 2 выбрать ветку `lab2-delivery-design` и указать следующие параметры:
    - **Language:** Docker
-   - **Root Directory:** `backend`
+   - **Root Directory:** оставить пустым
    - **Dockerfile Path:** `./Dockerfile`
    - **Docker Build Context Directory:** `.`
    - **Health Check Path:** `/health`
    - **Auto-Deploy:** On Commit
 
-   Render подставляет `backend/` к путям Dockerfile и контекста сборки. В этих двух полях указывайте путь относительно `backend`.
+   Dockerfile в корне собирает API и файлы прототипа в один образ. Для Compose и проверок backend используется `backend/Dockerfile`.
 4. Выбрать доступный тариф и нажать **Deploy Web Service**.
 5. Дождаться успешной сборки и запуска контейнера.
-6. Открыть выданный Render HTTPS-адрес и проверить `/`, `/health` и `/docs`. Все три маршрута должны вернуть HTTP 200, а `/health` — `{"status":"ok"}`.
+6. Проверить `/`, `/health`, `/docs` и `/prototype/` по HTTPS. Все маршруты должны вернуть HTTP 200, а `/health` — `{"status":"ok"}`.
 7. Записать проверенный HTTPS-адрес в этот документ и раздел Production в README.
 
-**Прод-URL:** [Reviews Analyzer API](https://stream-6-smallindigroup.onrender.com/).
+**Прод-URL** — [Reviews Analyzer API](https://stream-6-smallindigroup.onrender.com/). [Прототип](https://stream-6-smallindigroup.onrender.com/prototype/).
 
 После слияния Pull Request выбрать `main` в **Settings → Build & Deploy → Branch**. После развёртывания `main` повторить проверки по тому же HTTPS-адресу.
 
