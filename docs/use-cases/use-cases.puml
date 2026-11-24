@@ -1,0 +1,42 @@
+@startuml
+!pragma layout smetana
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 16
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam actorBorderColor #243B53
+skinparam actorFontColor #243B53
+skinparam usecaseBackgroundColor #EFF6FF
+skinparam usecaseBorderColor #4878A8
+skinparam rectangleBorderColor #91A4B7
+skinparam ArrowColor #63788D
+skinparam dpi 150
+
+title Reviews Analyzer — use cases MVP
+
+actor "Продавец / менеджер\nмагазина одежды и текстиля" as Seller
+
+rectangle "Reviews Analyzer" {
+  usecase "UC-01\nПодготовить корректный\nпакет к анализу" as UC01
+  usecase "UC-02\nПолучить проверяемый\nразбор отзывов" as UC02
+  usecase "UC-03\nНайти повторяющиеся\nпроблемы товара" as UC03
+  usecase "UC-04\nОпределить, какие проблемы\nпроверить первыми" as UC04
+  usecase "UC-05\nВыбрать обоснованное\nдействие" as UC05
+  usecase "UC-06\nПроверить подозрительные\nотзывы" as UC06
+}
+
+Seller -- UC01
+Seller -- UC02
+Seller -- UC03
+Seller -- UC04
+Seller -- UC05
+Seller -- UC06
+
+legend bottom
+  Линия: участие продавца в сценарии.
+  Порядок работы и предусловия описаны в текстах UC.
+  Действие выбирает и выполняет человек.
+endlegend
+@enduml
